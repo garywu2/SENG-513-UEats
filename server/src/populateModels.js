@@ -22,11 +22,28 @@ const saveUser = async (name, email, phoneNum, username, type) => {
   });
 
   await user.save();
+  console.log(`user ${name} saved`);
 };
 
 const getUserID = async (name) => {
   const users = await User.find({ name: name });
-  return users[0]._id;
+  const userID = users[0];
+  return userID;
+};
+
+const addShoppingCartToUser = async (userID) => {
+  const user = await User.findOne({ _id: userID });
+  const carts = await ShoppingCart.find();
+  user.shoppingCart = carts[0]._id;
+  await user.save();
+  console.log(`Shopping cart added to user`);
+};
+
+const addStoreToUser = async (userID, storeID) => {
+  const user = await User.findOne({ _id: userID });
+  user.store = storeID;
+  await user.save();
+  console.log(`Store added to user`);
 };
 
 const saveStore = async (
@@ -48,11 +65,28 @@ const saveStore = async (
   } catch (e) {
     console.log(e);
   }
+
+  console.log(`Store ${name} saved`);
 };
 
-const getStoreID = async (name) => {
-  const stores = await Store.find({ name: name });
+const getStoreID = async () => {
+  const stores = await Store.find();
   return stores[0]._id;
+};
+
+const addFoodItemsToStore = async (storeID, foodItems) => {
+  const store = await Store.findOne({ _id: storeID });
+  store.foodItems = foodItems;
+  await store.save();
+  console.log(`food items added to store`);
+};
+
+const addOrdersToStore = async (storeID, processedOrders, activeOrders) => {
+  const store = await Store.findOne({ _id: storeID });
+  store.activeOrders = activeOrders;
+  store.processedOrders = processedOrders;
+  await store.save();
+  console.log(`Orders added to store`);
 };
 
 const saveFoodItem = async (
@@ -71,17 +105,27 @@ const saveFoodItem = async (
   });
   try {
     await foodItem.save();
+    console.log(`Food item ${name} saved`);
   } catch (e) {
     console.log(e);
   }
 };
 
-const saveShoppingCart = async (clientID) => {
+const getAllFoodItems = async () => {
+  const foodItems = await FoodItem.find();
+  const result = [];
+  foodItems.map((item) => result.push({ foodItem: item._id, quantity: 1 }));
+  return result;
+};
+
+const saveShoppingCart = async (clientID, foodItems) => {
   const shoppingCart = new ShoppingCart({
     client: clientID,
+    foodItems: foodItems,
   });
 
   await shoppingCart.save();
+  console.log(`Shopping cart saved`);
 };
 
 const saveOrder = async (
@@ -105,6 +149,18 @@ const saveOrder = async (
   } catch (e) {
     console.log(e);
   }
+
+  console.log(`Order saved`);
+};
+
+const getActiveOrders = async () => {
+  const result = await Order.find({ status: ORDER_STATUS.active });
+  return result;
+};
+
+const getProcessedOrders = async () => {
+  const result = await Order.find({ status: ORDER_STATUS.processed });
+  return result;
 };
 
 const saveReview = async (
@@ -128,23 +184,101 @@ const saveReview = async (
   } catch (e) {
     console.log(e);
   }
-  console.log("saved");
+  console.log(`Review "${comment}" saved`);
 };
 
-//functions
+//populate Models
 
-// saveUser("Smith","smith@gmail.com", "1234567895", "smith", USER_TYPE.admin)
+const insertData = async () => {
+  await saveUser(
+    "Smith",
+    "smith@gmail.com",
+    "1234567895",
+    "smith",
+    USER_TYPE.admin
+  );
 
-// saveUser("John","JOHN@gmail.com", "1234567895", "JOHN", USER_TYPE.client)
+  await saveUser(
+    "John",
+    "JOHN@gmail.com",
+    "1234567895",
+    "JOHN",
+    USER_TYPE.client
+  );
 
-// saveUser("Steve","steve@gmail.com", "1234567895", "steve", USER_TYPE.seller)
+  await saveUser(
+    "Steve",
+    "steve@gmail.com",
+    "1234567895",
+    "steve",
+    USER_TYPE.seller
+  );
 
-// getUserID("John");
+  const sellerID = await getUserID("Steve");
+  const clientID = await getUserID("John");
 
-// saveStore("Burger Store", "we sell burgers!","1234567895", "6368874c80ff569389febe98", "U of C")
+  await saveStore(
+    "Burger Store",
+    "we sell burgers!",
+    "1234567895",
+    sellerID,
+    "U of C"
+  );
 
-// saveFoodItem("Burger", 10,"Beyond meat burger",true,"63688e501ae15a223e13228c" )
+  const storeID = await getStoreID();
 
-// saveOrder("6368874c80ff569389febe98","63688e501ae15a223e13228c", [{ foodItem: "636895ba3a960393809e28f1", quantity: 2 }], new Date(), 10, ORDER_STATUS.active )
+  await saveFoodItem("BB Burger", 10, "Beyond Meat Burger", true, storeID);
 
-// saveReview("6368874c80ff569389febe98","63688e501ae15a223e13228c","Good stuff!", new Date(), 5, REVIEW_TYPE.comment )
+  await saveFoodItem("M Burger", 12, "Meat Burger", true, storeID);
+
+  await saveFoodItem("V Burger", 10, "Veggy Burger", true, storeID);
+
+  const foodItems = await getAllFoodItems();
+
+  await saveOrder(
+    clientID,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.active
+  );
+  await saveOrder(
+    clientID,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+
+  await saveShoppingCart(clientID, foodItems);
+
+  const processedOrders = await getProcessedOrders();
+  const activeOrders = await getActiveOrders();
+
+  addShoppingCartToUser(clientID);
+  addStoreToUser(sellerID, storeID);
+
+  await addOrdersToStore(storeID, processedOrders, activeOrders);
+  await addFoodItemsToStore(storeID, foodItems);
+
+  saveReview(
+    clientID,
+    storeID,
+    "Good stuff!",
+    new Date(),
+    5,
+    REVIEW_TYPE.comment
+  );
+  saveReview(
+    clientID,
+    storeID,
+    "Thanks John!",
+    new Date(),
+    5,
+    REVIEW_TYPE.reply
+  );
+};
+
+insertData();

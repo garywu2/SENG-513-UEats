@@ -19,12 +19,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  store: mongoose.SchemaTypes.ObjectId,
+  store: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Store",
+  },
   approvalStatus: {
     type: Boolean,
     default: false,
   },
-  shoppingCart: mongoose.SchemaTypes.ObjectId,
+  shoppingCart: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "ShoppingCart",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

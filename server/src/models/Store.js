@@ -28,7 +28,10 @@ const storeSchema = new mongoose.Schema({
     default: [],
   },
   availabilityTime: {
-    type: [Date],
+    type: {
+      startTime: { type: Date, required: true },
+      endTime: { type: Date, required: true },
+    },
   },
   pickupLocation: {
     type: String,

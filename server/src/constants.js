@@ -6,7 +6,7 @@ const USER_TYPE = {
 
 const ORDER_STATUS = {
   active: "active",
-  procesed: "processed",
+  processed: "processed",
 };
 
 const REVIEW_TYPE = {
