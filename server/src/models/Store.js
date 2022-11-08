@@ -13,7 +13,7 @@ const storeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  seller: {
+  vendor: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
     ref: "User",

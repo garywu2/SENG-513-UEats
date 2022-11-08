@@ -50,14 +50,14 @@ const saveStore = async (
   name,
   description,
   bankAccountNum,
-  sellerID,
+  vendorID,
   pickupLocation
 ) => {
   const store = new Store({
     name: name,
     description: description,
     bankAccountNum: bankAccountNum,
-    seller: sellerID,
+    vendor: vendorID,
     pickupLocation: pickupLocation,
   });
   try {
@@ -211,17 +211,17 @@ const insertData = async () => {
     "steve@gmail.com",
     "1234567895",
     "steve",
-    USER_TYPE.seller
+    USER_TYPE.vendor
   );
 
-  const sellerID = await getUserID("Steve");
+  const vendorID = await getUserID("Steve");
   const clientID = await getUserID("John");
 
   await saveStore(
     "Burger Store",
     "we sell burgers!",
     "1234567895",
-    sellerID,
+    vendorID,
     "U of C"
   );
 
@@ -258,7 +258,7 @@ const insertData = async () => {
   const activeOrders = await getActiveOrders();
 
   addShoppingCartToUser(clientID);
-  addStoreToUser(sellerID, storeID);
+  addStoreToUser(vendorID, storeID);
 
   await addOrdersToStore(storeID, processedOrders, activeOrders);
   await addFoodItemsToStore(storeID, foodItems);

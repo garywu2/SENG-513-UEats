@@ -1,6 +1,6 @@
 const USER_TYPE = {
   client: "client",
-  seller: "seller",
+  vendor: "vendor",
   admin: "admin",
 };
 
