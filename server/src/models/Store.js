@@ -22,7 +22,6 @@ const storeSchema = new mongoose.Schema({
     type: [
       {
         foodItem: { type: mongoose.SchemaTypes.ObjectId, ref: "FoodItem" },
-        quantity: Number,
       },
     ],
     default: [],

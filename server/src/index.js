@@ -1,6 +1,8 @@
 const express = require("express");
-const Users = require("./routes/Users");
 const mongoose = require("mongoose");
+const Users = require("./routes/Users");
+const Stores = require("./routes/Stores");
+const Orders = require("./routes/Orders");
 
 const app = express();
 
@@ -14,6 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //Routes
 app.use("/users", Users);
+
+app.use("/stores", Stores);
+
+app.use("/orders", Orders);
 
 const PORT = process.env.PORT || 5000;
 

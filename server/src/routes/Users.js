@@ -14,10 +14,23 @@ router.get("/", async (req, res) => {
 });
 
 //get user by id
-router.get("/:_id", async (req, res) => {
+router.get("/user/:_id", async (req, res) => {
+  if (!req.params._id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
   try {
     const user = await User.findOne({ _id: req.params._id });
     res.json(user);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
+//get all unapproved users
+router.get("/unapproved", async (req, res) => {
+  try {
+    const users = await User.find({ approvalStatus: false });
+    res.json(users);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

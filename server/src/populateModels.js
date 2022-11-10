@@ -75,8 +75,10 @@ const getStoreID = async () => {
 };
 
 const addFoodItemsToStore = async (storeID, foodItems) => {
+  let storeFoodItems = [];
+  foodItems.map((item) => storeFoodItems.push({ foodItem: item.foodItem }));
   const store = await Store.findOne({ _id: storeID });
-  store.foodItems = foodItems;
+  store.foodItems = storeFoodItems;
   await store.save();
   console.log(`food items added to store`);
 };
