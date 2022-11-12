@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
-// const User = require("../models/User");
-// const ShoppingCart = require("../models/ShoppingCart");
 const Store = require("../models/Store");
-const Order = require("../models/Order");
-const FoodItem = require("../models/FoodItem");
-const { ORDER_STATUS } = require("../constants");
 const Review = require("../models/Review");
+const FoodItem = require("../models/FoodItem");
+const Order = require("../models/Order");
 
 //get all stores
 router.get("/", async (req, res) => {
@@ -68,7 +65,7 @@ router.get("/store/food-items/:_id", async (req, res) => {
   }
   try {
     const store = await Store.findOne({ _id: req.params._id }).populate(
-      "foodItems.foodItem"
+      "foodItems"
     );
     res.json(store.foodItems);
   } catch (e) {
@@ -122,12 +119,12 @@ router.post("/", async (req, res) => {
 
 //PUT requests
 
-//update store, id required, will not update food items, orders
+//update store, id required, will not update food items, orders, rating
 router.put("/", async (req, res) => {
   const newAttrs = req.body;
   const attrKeys = Object.keys(newAttrs);
 
-  const notToBeUpdated = ["_id", "activeOrders", "processedOrders"];
+  const notToBeUpdated = ["_id", "activeOrders", "processedOrders", "rating"];
 
   if (!newAttrs._id) {
     return res.status(400).json({ msg: "store id is missing" });
@@ -142,6 +139,26 @@ router.put("/", async (req, res) => {
     });
     await store.save();
     res.json(store);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
+//delete a store, id required
+//related food items, orders and reviews will be deleted
+//ask user to confirm
+router.delete("/", async (req, res) => {
+  const id = req.body._id;
+  if (!id) {
+    return res.status(400).json({ msg: "Store id is missing" });
+  }
+  try {
+    await Store.deleteOne({ _id: id });
+    await FoodItem.deleteMany({ store: id });
+    await Order.deleteMany({ store: id });
+    await Review.deleteMany({ store: id });
+
+    res.json({ msg: "Store deleted successfully" });
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

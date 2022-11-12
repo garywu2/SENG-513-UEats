@@ -19,11 +19,7 @@ const storeSchema = new mongoose.Schema({
     ref: "User",
   },
   foodItems: {
-    type: [
-      {
-        foodItem: { type: mongoose.SchemaTypes.ObjectId, ref: "FoodItem" },
-      },
-    ],
+    type: [{ type: mongoose.SchemaTypes.ObjectId, ref: "FoodItem" }],
     default: [],
   },
   availabilityTime: {

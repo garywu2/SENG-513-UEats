@@ -48,24 +48,33 @@ router.get("/order/food-items/:_id", async (req, res) => {
 
 //PUT Requests
 
-//update order, id required, will not update food items
+//update order, id required, will update pickup time, food items and total cost
+//use /order/process for updating status
 router.put("/", async (req, res) => {
-  const newAttrs = req.body;
-  const attrKeys = Object.keys(newAttrs);
-
-  const notToBeUpdated = ["_id", "foodItems"];
-
-  if (!newAttrs._id) {
+  const orderObject = {
+    id: req.body._id,
+    pickupTime: req.body.pickupTime,
+    foodItems: req.body.foodItems,
+    totalCost: req.body.totalCost,
+  };
+  if (!orderObject.id) {
     return res.status(400).json({ msg: "order id is missing" });
   }
 
   try {
-    const order = await Order.findOne({ _id: newAttrs._id });
-    attrKeys.forEach((key) => {
-      if (!notToBeUpdated.includes(key)) {
-        order[key] = newAttrs[key];
+    const order = await Order.findOne({ _id: orderObject.id });
+    if (!!orderObject.pickupTime) {
+      order.pickupTime = req.body.orderObject.pickupTime;
+    }
+    if (!!orderObject.foodItems) {
+      if (orderObject.totalCost === undefined) {
+        return res
+          .status(400)
+          .json({ msg: "Total cost required when updating food items" });
       }
-    });
+      order.foodItems = orderObject.foodItems;
+      order.totalCost = orderObject.totalCost;
+    }
     await order.save();
     res.json(order);
   } catch (e) {
@@ -73,60 +82,68 @@ router.put("/", async (req, res) => {
   }
 });
 
-//add food item to order, id required,
-//food item id and quantity required
-router.put("/add/food-item", async (req, res) => {
-  const orderID = req.body._id;
-  const foodItemID = req.body.foodItem;
-  const quantity = req.body.quantity;
+//-----------------> Uncomment them if you need them
 
-  if (!orderID || !foodItemID || !quantity) {
-    return res
-      .status(400)
-      .json({ msg: "One of the required attributes is missing" });
-  }
+// //add food item to order, updates total price
+// //food item id and quantity required
 
-  try {
-    const order = await Order.findOne({ _id: orderID });
-    order.foodItems.push({ foodItem: foodItemID, quantity: quantity });
-    await order.save();
-    res.json(order);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
+// router.put("/order/add/food-item", async (req, res) => {
+//   const orderID = req.body._id;
+//   const foodItemID = req.body.foodItem;
+//   const quantity = req.body.quantity;
 
-//remove food item from order, id required,
-//food item id required
-router.put("/remove/food-item", async (req, res) => {
-  const orderID = req.body._id;
-  const foodItemID = req.body.foodItem;
+//   if (!orderID || !foodItemID || !quantity) {
+//     return res
+//       .status(400)
+//       .json({ msg: "One of the required attributes is missing" });
+//   }
 
-  if (!orderID || !foodItemID) {
-    return res
-      .status(400)
-      .json({ msg: "One of the required attributes is missing" });
-  }
+//   try {
+//     const order = await Order.findOne({ _id: orderID });
+//     order.foodItems.push({ foodItem: foodItemID, quantity: quantity });
+//     const foodItem = FoodItem.findOne({ _id: foodItemID });
+//     order.totalCost += foodItem.price * quantity;
+//     await order.save();
+//     res.json(order);
+//   } catch (e) {
+//     return res.status(400).json({ msg: e.message });
+//   }
+// });
 
-  try {
-    const order = await Order.findOne({ _id: orderID });
-    order.foodItems = order.foodItems.filter((item) => {
-      console.log(item.foodItem, foodItemID);
-      return item.foodItem.toString() !== foodItemID;
-    });
-    await order.save();
-    res.json(order);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
+// //remove food item from order, updates total price
+// //food item id required
+
+// router.put("/order/remove/food-item", async (req, res) => {
+//   const orderID = req.body._id;
+//   const foodItemID = req.body.foodItem;
+
+//   if (!orderID || !foodItemID) {
+//     return res
+//       .status(400)
+//       .json({ msg: "One of the required attributes is missing" });
+//   }
+
+//   try {
+//     const order = await Order.findOne({ _id: orderID });
+//     order.foodItems = order.foodItems.filter((item) => {
+//       return item.foodItem.toString() !== foodItemID;
+//     });
+//     const foodItem = FoodItem.findOne({ _id: foodItemID });
+//     order.totalCost -= foodItem.price * foodItem.quantity;
+//     await order.save();
+//     res.json(order);
+//   } catch (e) {
+//     return res.status(400).json({ msg: e.message });
+//   }
+// });
 
 // process order, require store and order id
+//Sets order status to processed, removes it from store processedOrders array
+//and adds it to the processedOrders array
 router.put("/order/process", async (req, res) => {
   const id = req.body._id;
-  const storeID = req.body.store;
-  if (!id || !storeID) {
-    return res.status(400).json({ msg: "Store id or order id is missing" });
+  if (!id) {
+    return res.status(400).json({ msg: "order id is missing" });
   }
   try {
     //update order status
@@ -135,7 +152,7 @@ router.put("/order/process", async (req, res) => {
     await order.save();
 
     //update store order arrays
-    const store = await Store.findOne({ _id: storeID });
+    const store = await Store.findOne({ _id: order.store });
     store.activeOrders = store.activeOrders.filter(
       (orderID) => orderID.toString() !== id
     );
@@ -174,13 +191,41 @@ router.post("/", async (req, res) => {
     await dbOrder.save();
 
     const store = await Store.findOne({ _id: order.store });
-    console.log(store.activeOrders);
     store.activeOrders.push(dbOrder._id);
     await store.save();
 
     res.json(order);
   } catch (e) {
     console.log(e);
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
+//delete an order, id required
+//will be removed from the store
+router.delete("/", async (req, res) => {
+  const id = req.body._id;
+  if (!id) {
+    return res.status(400).json({ msg: "Review id is missing" });
+  }
+  try {
+    const order = await Order.findOne({ _id: id });
+    await Order.deleteOne({ _id: id });
+    const store = await Store.findOne({ _id: order.store });
+
+    if (order.status === ORDER_STATUS.active) {
+      store.activeOrders = store.activeOrders.filter((order) => {
+        return order !== id;
+      });
+    } else {
+      store.processedOrders = store.processedOrders.filter((order) => {
+        return order.toString() !== id;
+      });
+    }
+    await store.save();
+
+    res.json({ msg: "Order deleted successfully" });
+  } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
 });

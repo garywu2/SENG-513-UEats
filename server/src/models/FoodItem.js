@@ -26,6 +26,10 @@ const foodItemSchema = new mongoose.Schema({
     required: true,
     ref: "Store",
   },
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
 });
 
 module.exports = mongoose.model("FoodItem", foodItemSchema);

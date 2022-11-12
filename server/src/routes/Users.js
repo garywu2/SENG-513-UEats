@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const ShoppingCart = require("../models/ShoppingCart");
+const { USER_TYPE } = require("../constants");
 
 //get all users
 router.get("/", async (req, res) => {
@@ -58,11 +59,13 @@ router.post("/", async (req, res) => {
   try {
     await dbUser.save();
 
-    const shoppingCart = new ShoppingCart({ client: dbUser._id });
-    await shoppingCart.save();
+    if (user.type === USER_TYPE.client) {
+      const shoppingCart = new ShoppingCart({ client: dbUser._id });
+      await shoppingCart.save();
 
-    dbUser.shoppingCart = shoppingCart._id;
-    await dbUser.save();
+      dbUser.shoppingCart = shoppingCart._id;
+      await dbUser.save();
+    }
 
     res.json(dbUser);
   } catch (e) {

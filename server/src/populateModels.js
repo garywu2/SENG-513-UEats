@@ -59,6 +59,7 @@ const saveStore = async (
     bankAccountNum: bankAccountNum,
     vendor: vendorID,
     pickupLocation: pickupLocation,
+    rating: 5,
   });
   try {
     await store.save();
@@ -76,7 +77,7 @@ const getStoreID = async () => {
 
 const addFoodItemsToStore = async (storeID, foodItems) => {
   let storeFoodItems = [];
-  foodItems.map((item) => storeFoodItems.push({ foodItem: item.foodItem }));
+  foodItems.map((item) => storeFoodItems.push(item.foodItem));
   const store = await Store.findOne({ _id: storeID });
   store.foodItems = storeFoodItems;
   await store.save();
@@ -170,23 +171,32 @@ const saveReview = async (
   storeID,
   comment,
   date,
-  rating,
-  reviewType
+  reviewType,
+  rating = null
 ) => {
   const review = new Review({
     client: clientID,
     store: storeID,
     comment: comment,
     date: date,
-    rating: rating,
     reviewType: reviewType,
   });
+  if (!!reviewType) {
+    review.rating = rating;
+  }
   try {
     await review.save();
   } catch (e) {
     console.log(e);
   }
   console.log(`Review "${comment}" saved`);
+};
+
+const addReviewParent = async () => {
+  const review = await Review.findOne({ reviewType: REVIEW_TYPE.reply });
+  const parent = await Review.findOne({ reviewType: REVIEW_TYPE.comment });
+  review.parent = parent;
+  await review.save();
 };
 
 //populate Models
@@ -265,22 +275,22 @@ const insertData = async () => {
   await addOrdersToStore(storeID, processedOrders, activeOrders);
   await addFoodItemsToStore(storeID, foodItems);
 
-  saveReview(
+  await saveReview(
     clientID,
     storeID,
     "Good stuff!",
     new Date(),
-    5,
-    REVIEW_TYPE.comment
+    REVIEW_TYPE.comment,
+    5
   );
-  saveReview(
+  await saveReview(
     clientID,
     storeID,
     "Thanks John!",
     new Date(),
-    5,
     REVIEW_TYPE.reply
   );
+  addReviewParent();
 };
 
 insertData();

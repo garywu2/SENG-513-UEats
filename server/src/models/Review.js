@@ -21,14 +21,13 @@ const reviewSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    required: true,
     min: 0,
   },
   reviewType: {
     type: String,
     required: true,
   },
-  reply: mongoose.SchemaTypes.ObjectId,
+  parent: mongoose.SchemaTypes.ObjectId,
 });
 
 module.exports = mongoose.model("Review", reviewSchema);
