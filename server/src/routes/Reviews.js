@@ -13,7 +13,9 @@ const getNumberOfReviewsForStore = async (storeID) => {
   });
   return reviews.length;
 };
-//get all shopping carts
+
+//GET Requests
+//get all reviews
 router.get("/", async (req, res) => {
   try {
     const reviews = await Review.find();
@@ -24,7 +26,7 @@ router.get("/", async (req, res) => {
 });
 
 //get review by id
-router.get("/review/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Review id is missing" });
@@ -32,20 +34,6 @@ router.get("/review/:_id", async (req, res) => {
   try {
     const review = await Review.findOne({ _id: id });
     res.json(review);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
-
-//get reviews by store id
-router.get("/review/store/:_id", async (req, res) => {
-  const id = req.params._id;
-  if (!id) {
-    return res.status(400).json({ msg: "Store id is missing" });
-  }
-  try {
-    const reviews = await Review.find({ store: id });
-    res.json(reviews);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
-const FoodItem = require("../models/FoodItem");
 const { ORDER_STATUS } = require("../constants");
 const Store = require("../models/Store");
-const User = require("../models/User");
 
 //get all orders
 router.get("/", async (req, res) => {
@@ -17,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 //get order by id
-router.get("/order/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Order id is missing" });
@@ -31,7 +29,7 @@ router.get("/order/:_id", async (req, res) => {
 });
 
 //get order food items
-router.get("/order/food-items/:_id", async (req, res) => {
+router.get("/:_id/food-items", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Order id is missing" });
@@ -140,7 +138,7 @@ router.put("/", async (req, res) => {
 // process order, require store and order id
 //Sets order status to processed, removes it from store processedOrders array
 //and adds it to the processedOrders array
-router.put("/order/process", async (req, res) => {
+router.put("/process", async (req, res) => {
   const id = req.body._id;
   if (!id) {
     return res.status(400).json({ msg: "order id is missing" });
@@ -185,8 +183,8 @@ router.post("/", async (req, res) => {
   ) {
     return res.status(400).json({ msg: "Order is missing a field" });
   }
-  const dbOrder = new Order(order);
   try {
+    const dbOrder = new Order(order);
     dbOrder.status = ORDER_STATUS.active;
     await dbOrder.save();
 

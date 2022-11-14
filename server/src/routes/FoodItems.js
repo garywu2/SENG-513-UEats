@@ -11,7 +11,7 @@ const ShoppingCart = require("../models/ShoppingCart");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//get all orders
+//get all food items
 router.get("/", async (req, res) => {
   try {
     const foodItems = await FoodItem.find();
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 //get food item by id
-router.get("/food-item/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Food item id is missing" });
@@ -35,22 +35,8 @@ router.get("/food-item/:_id", async (req, res) => {
   }
 });
 
-//get food items by store id
-router.get("/food-item/store/:_id", async (req, res) => {
-  const id = req.params._id;
-  if (!id) {
-    return res.status(400).json({ msg: "Store id is missing" });
-  }
-  try {
-    const foodItems = await FoodItem.find({ store: id });
-    res.json(foodItems);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
-
 //get food items by a category
-router.get("/food-item/category/:category", async (req, res) => {
+router.get("/category/:category", async (req, res) => {
   const category = req.params.category;
   if (!category) {
     return res.status(400).json({ msg: "Categoryis missing" });
@@ -175,8 +161,6 @@ router.delete("/", async (req, res) => {
         },
       },
     });
-
-    console.log(carts);
 
     //delete from shopping carts
     for (let i = 0; i < carts.length; i++) {

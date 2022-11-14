@@ -14,8 +14,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+//get all unapproved users
+router.get("/unapproved", async (req, res) => {
+  try {
+    const users = await User.find({ approvalStatus: false });
+    res.json(users);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //get user by id
-router.get("/user/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "User id is missing" });
   }
@@ -27,11 +37,16 @@ router.get("/user/:_id", async (req, res) => {
   }
 });
 
-//get all unapproved users
-router.get("/unapproved", async (req, res) => {
+//get user shopping cart
+router.get("/:_id/shopping-cart", async (req, res) => {
+  if (!req.params._id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
   try {
-    const users = await User.find({ approvalStatus: false });
-    res.json(users);
+    const user = await User.findOne({ _id: req.params._id }).populate(
+      "shoppingCart"
+    );
+    res.json(user.shoppingCart);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

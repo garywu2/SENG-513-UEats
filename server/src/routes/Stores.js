@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 //get store by id
-router.get("/store/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "Store id is missing" });
   }
@@ -29,7 +29,7 @@ router.get("/store/:_id", async (req, res) => {
 });
 
 //get active orders for store
-router.get("/store/orders/active/:_id", async (req, res) => {
+router.get("/:_id/orders/active", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "Store id is missing" });
   }
@@ -44,7 +44,7 @@ router.get("/store/orders/active/:_id", async (req, res) => {
 });
 
 //get processed orders for store
-router.get("/store/orders/processed/:_id", async (req, res) => {
+router.get("/:_id/orders/processed", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "Store id is missing" });
   }
@@ -59,7 +59,7 @@ router.get("/store/orders/processed/:_id", async (req, res) => {
 });
 
 //get food items for store
-router.get("/store/food-items/:_id", async (req, res) => {
+router.get("/:_id/food-items", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "Store id is missing" });
   }
@@ -74,7 +74,7 @@ router.get("/store/food-items/:_id", async (req, res) => {
 });
 
 //get store reviews
-router.get("/store/reviews/:_id", async (req, res) => {
+router.get("/:_id/reviews", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Store id is missing" });
@@ -120,11 +120,20 @@ router.post("/", async (req, res) => {
 //PUT requests
 
 //update store, id required, will not update food items, orders, rating
+//use order process endpoints
+//rating will automatically updated when reviews are added or changed
+//food items will be automatically added or removed when a food item is added or removed
 router.put("/", async (req, res) => {
   const newAttrs = req.body;
   const attrKeys = Object.keys(newAttrs);
 
-  const notToBeUpdated = ["_id", "activeOrders", "processedOrders", "rating"];
+  const notToBeUpdated = [
+    "_id",
+    "activeOrders",
+    "processedOrders",
+    "rating",
+    "foodItems",
+  ];
 
   if (!newAttrs._id) {
     return res.status(400).json({ msg: "store id is missing" });

@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 
 //get cart by id
-router.get("/shopping-cart/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Cart id is missing" });
@@ -26,22 +26,8 @@ router.get("/shopping-cart/:_id", async (req, res) => {
   }
 });
 
-//get cart by client id
-router.get("/shopping-cart/client/:_id", async (req, res) => {
-  const id = req.params._id;
-  if (!id) {
-    return res.status(400).json({ msg: "Client id is missing" });
-  }
-  try {
-    const cart = await ShoppingCart.findOne({ client: id });
-    res.json(cart);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
-
 //get  food items
-router.get("/shopping-cart/food-items/:_id", async (req, res) => {
+router.get("/:_id/food-items", async (req, res) => {
   const id = req.params._id;
   if (!id) {
     return res.status(400).json({ msg: "Cart id is missing" });
@@ -60,7 +46,7 @@ router.get("/shopping-cart/food-items/:_id", async (req, res) => {
 
 //add food item to cart, id required,
 //food item id and quantity required
-router.put("/shopping-cart/add/food-item", async (req, res) => {
+router.put("/add/food-item", async (req, res) => {
   const cartID = req.body._id;
   const foodItemID = req.body.foodItem;
   const quantity = req.body.quantity;
@@ -83,7 +69,7 @@ router.put("/shopping-cart/add/food-item", async (req, res) => {
 
 //remove food item from cart, id required,
 //food item id required
-router.put("/shopping-cart/remove/food-item", async (req, res) => {
+router.put("/remove/food-item", async (req, res) => {
   const cartID = req.body._id;
   const foodItemID = req.body.foodItem;
 
