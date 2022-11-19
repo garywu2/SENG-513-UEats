@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const ShoppingCart = require("../models/ShoppingCart");
+const { USER_TYPE } = require("../constants");
 
 //get all users
 router.get("/", async (req, res) => {
@@ -13,11 +14,39 @@ router.get("/", async (req, res) => {
   }
 });
 
+//get all unapproved users
+router.get("/unapproved", async (req, res) => {
+  try {
+    const users = await User.find({ approvalStatus: false });
+    res.json(users);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //get user by id
 router.get("/:_id", async (req, res) => {
+  if (!req.params._id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
   try {
     const user = await User.findOne({ _id: req.params._id });
     res.json(user);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
+//get user shopping cart
+router.get("/:_id/shopping-cart", async (req, res) => {
+  if (!req.params._id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
+  try {
+    const user = await User.findOne({ _id: req.params._id }).populate(
+      "shoppingCart"
+    );
+    res.json(user.shoppingCart);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
@@ -45,11 +74,13 @@ router.post("/", async (req, res) => {
   try {
     await dbUser.save();
 
-    const shoppingCart = new ShoppingCart({ client: dbUser._id });
-    await shoppingCart.save();
+    if (user.type === USER_TYPE.client) {
+      const shoppingCart = new ShoppingCart({ client: dbUser._id });
+      await shoppingCart.save();
 
-    dbUser.shoppingCart = shoppingCart._id;
-    await dbUser.save();
+      dbUser.shoppingCart = shoppingCart._id;
+      await dbUser.save();
+    }
 
     res.json(dbUser);
   } catch (e) {
