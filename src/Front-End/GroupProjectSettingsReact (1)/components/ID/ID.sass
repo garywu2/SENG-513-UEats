@@ -1,0 +1,53 @@
+@import '../../variables'
+
+.name
+  align-items: flex-start
+  border-radius: 8px
+  display: flex
+  flex-direction: column
+  gap: 17px
+  min-height: 91px
+  width: 441px
+
+.restaurant
+  letter-spacing: 0
+  line-height: normal
+  margin-top: -1px
+  min-height: 27px
+
+.overlap-group-9
+  align-items: flex-start
+  border: 1px solid
+  border-color: $amethyst-smoke
+  border-radius: 8px
+  display: flex
+  height: 48px
+  min-width: 439px
+  padding: 9px 33px
+
+.fast-food-restaurant
+  letter-spacing: 0
+  line-height: normal
+  min-height: 27px
+
+.name.phone .restaurant,
+.name.owner .restaurant,
+.name.email .restaurant
+  min-height: unset
+  width: 107px
+
+.name.phone .overlap-group-9
+  padding: 9px 31px
+
+.name.phone .fast-food-restaurant,
+.name.owner .fast-food-restaurant
+  min-height: unset
+  width: 129px
+
+.name.owner .overlap-group-9,
+.name.email .overlap-group-9
+  padding: 8px 33px
+
+.name.id .overlap-group-9
+  padding: 8px 31px
+
