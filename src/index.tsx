@@ -1,17 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from './components/HomePage';
+import { CssBaseline } from "@mui/material";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import { store } from "./redux/store";
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <Provider store={store}>
+      <CssBaseline />
+      <App />
+    </Provider>
+  </React.StrictMode>
 );
