@@ -20,7 +20,6 @@ const appRoutes: RouteType[] = [
     state: "home",
   },
   {
-    index: false,
     path: "/dashboard",
     element: <Dashboard name="User" />, // TODO grab username from db
     state: "dashboard",
@@ -30,7 +29,6 @@ const appRoutes: RouteType[] = [
     },
   },
   {
-    index: false,
     path: "/restaurants",
     element: <RestaurantsPage />,
     state: "restaurants",
@@ -40,7 +38,6 @@ const appRoutes: RouteType[] = [
     },
   },
   {
-    index: false,
     path: "/orders",
     element: <OrderPage />,
     state: "orders",
@@ -50,7 +47,6 @@ const appRoutes: RouteType[] = [
     },
   },
   {
-    index: false,
     path: "/cart",
     element: <CartPage />,
     state: "cart",
@@ -60,7 +56,6 @@ const appRoutes: RouteType[] = [
     },
   },
   {
-    index: false,
     path: "/settings",
     element: <SettingPage />,
     state: "settings",
