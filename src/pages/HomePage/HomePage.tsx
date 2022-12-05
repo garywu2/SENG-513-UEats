@@ -4,7 +4,6 @@ import Sidebar from "../../components/common/Sidebar";
 const HomePage = () => {
   return (
     <div>
-      <Sidebar />
       <h1>
         Login goes here. Sidebar should be not be displayed at this point, this
         depends on login state TBD
