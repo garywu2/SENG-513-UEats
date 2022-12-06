@@ -3,6 +3,10 @@ const router = express.Router();
 const User = require("../models/User");
 const ShoppingCart = require("../models/ShoppingCart");
 const { USER_TYPE } = require("../constants");
+const Store = require("../models/Store");
+const Review = require("../models/Review");
+const FoodItem = require("../models/FoodItem");
+const Order = require("../models/Order");
 
 //get all users
 router.get("/", async (req, res) => {
@@ -113,11 +117,22 @@ router.put("/", async (req, res) => {
 
 //delete a user, id required
 router.delete("/", async (req, res) => {
-  if (!req.body._id) {
+  const id = req.body._id;
+  if (!id) {
     return res.status(400).json({ msg: "User id is missing" });
   }
   try {
-    await User.deleteOne({ _id: req.body._id });
+    const user = await User.findById(id);
+    if (user.type === USER_TYPE.vendor) {
+      const storeID = user.store;
+      await Store.deleteOne({ _id: storeID });
+      await FoodItem.deleteMany({ store: storeID });
+      await Order.deleteMany({ store: storeID });
+      await Review.deleteMany({ store: storeID });
+    } else {
+      await ShoppingCart.deleteOne({ _id: user.shoppingCart });
+    }
+    await User.deleteOne({ _id: id });
     res.json({ msg: "User deleted successfully" });
   } catch (e) {
     return res.status(400).json({ msg: e.message });

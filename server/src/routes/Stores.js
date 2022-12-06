@@ -162,10 +162,10 @@ router.delete("/", async (req, res) => {
     return res.status(400).json({ msg: "Store id is missing" });
   }
   try {
-    await Store.deleteOne({ _id: id });
     await FoodItem.deleteMany({ store: id });
     await Order.deleteMany({ store: id });
     await Review.deleteMany({ store: id });
+    await Store.deleteOne({ _id: id });
 
     res.json({ msg: "Store deleted successfully" });
   } catch (e) {
