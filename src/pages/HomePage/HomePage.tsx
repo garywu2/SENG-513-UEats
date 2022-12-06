@@ -1,9 +1,9 @@
 // TODO display Sidebar only if user is logged in
 import { Box, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import FirebaseContext from "../../context/firebase";
 import UserContext from "../../context/user";
 
@@ -75,14 +75,7 @@ const HomePage = () => {
           </Button>
         </div>
       ) : (
-        <Button
-          variant='contained'
-          onClick={() => {
-            signOut(auth);
-          }}
-        >
-          Logout
-        </Button>
+        <Navigate to='/dashboard' />
       )}
     </div>
   );
