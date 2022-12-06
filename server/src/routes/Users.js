@@ -37,6 +37,19 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
+//get user by email
+router.get("/email/:email", async (req, res) => {
+  if (!req.params.email) {
+    return res.status(400).json({ msg: "User email is missing" });
+  }
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    res.json(user);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //get user shopping cart
 router.get("/:_id/shopping-cart", async (req, res) => {
   if (!req.params._id) {
