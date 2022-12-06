@@ -1,16 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
+import UserContext from "./context/user";
+import useAuthListener from "./hooks/use-auth";
 import { routes } from "./routes";
 
 function App() {
+  const { user } = useAuthListener();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {routes}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <UserContext.Provider value={{ user }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<MainLayout user={user} />}>
+            {routes}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 
