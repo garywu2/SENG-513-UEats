@@ -19,4 +19,4 @@ SENG 513 Final Projects UEats 2022-2023
 
 ### firebase config
 
-- Add config.ts file that contained the config from firebase in src dir
+- Add .env file for the firebase config
