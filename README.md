@@ -14,3 +14,9 @@ SENG 513 Final Projects UEats 2022-2023
 
 - cd to the server directory
 - Run "npm run populate" to populate all database models
+
+## static
+
+### firebase config
+
+- Add .env file for the firebase config

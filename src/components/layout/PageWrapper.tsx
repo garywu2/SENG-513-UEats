@@ -1,5 +1,7 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
+import UserContext from "../../context/user";
 import { setAppState } from "../../redux/features/appStateSlice";
 
 type Props = {
@@ -8,6 +10,7 @@ type Props = {
 };
 
 const PageWrapper = (props: Props) => {
+  const { user } = useContext(UserContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,7 +19,11 @@ const PageWrapper = (props: Props) => {
     }
   }, [dispatch, props]);
 
-  return <>{props.children}</>;
+  return (
+    <>
+      {!!user || props.state === "home" ? props.children : <Navigate to='/' />}{" "}
+    </>
+  );
 };
 
 export default PageWrapper;
