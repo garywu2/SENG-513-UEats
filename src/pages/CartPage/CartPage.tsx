@@ -11,26 +11,30 @@ import { setFoodItemsState } from "../../redux/features/appStateSlice";
 const CartPage = () => {
   const [foodItems, setFoodItems] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
-  const mockCartID = "639164155b9cb5cac4179495";
 
   const dispatch = useDispatch();
   const storeFoodItems = useSelector(
     (state: any) => state.appState.cartFoodItems
   );
 
+  const userInfo = useSelector((state: any) => state.appState.userInfo);
+
   useEffect(() => {
     if (storeFoodItems.length > 0) {
-      console.log(storeFoodItems);
       setFoodItems(storeFoodItems);
     } else {
-      axios
-        .get(`http://localhost:5000/shopping-carts/${mockCartID}/food-items`)
-        .then((result: any) => {
-          console.log(result.data);
-          dispatch(setFoodItemsState(result.data));
-        });
+      if (userInfo.shoppingCart) {
+        axios
+          .get(
+            `http://localhost:5000/shopping-carts/${userInfo.shoppingCart}/food-items`
+          )
+          .then((result: any) => {
+            console.log(result.data);
+            dispatch(setFoodItemsState(result.data));
+          });
+      }
     }
-  }, [dispatch, storeFoodItems]);
+  }, [dispatch, storeFoodItems, userInfo]);
 
   useEffect(() => {
     let cost = 0;
@@ -44,7 +48,7 @@ const CartPage = () => {
   const updateCartItemQuantity = (itemID: string, quantity: string) => {
     axios
       .put("http://localhost:5000/shopping-carts/quantity/food-item", {
-        _id: mockCartID,
+        _id: userInfo.shoppingCart,
         foodItem: itemID,
         quantity: quantity,
       })
@@ -57,7 +61,7 @@ const CartPage = () => {
   const deleteCartItem = (itemID: string) => {
     axios
       .put("http://localhost:5000/shopping-carts/remove/food-item", {
-        _id: mockCartID,
+        _id: userInfo.shoppingCart,
         foodItem: itemID,
       })
       .then((result: any) => {
@@ -74,6 +78,7 @@ const CartPage = () => {
           currentQuantity={item.quantity}
           deleteCartItem={deleteCartItem}
           updateCartItemQuantity={updateCartItemQuantity}
+          key={item._id}
         />
       ))}
       <Box

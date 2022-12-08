@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Buffer } from "buffer";
 import { useEffect, useState } from "react";
 import { mainColors } from "../../configs/colorConfigs";
 
@@ -42,7 +43,16 @@ const ShoppingCartItem = (props: any) => {
         justifyContent='space-evenly'
         margin='auto'
       >
-        <Avatar src='/randomLogo.png'></Avatar>
+        {!!cartItem.image ? (
+          <Avatar
+            src={`data:${cartItem.image.contentType};base64,${Buffer.from(
+              cartItem.image.data
+            ).toString("base64")}`}
+          ></Avatar>
+        ) : (
+          <Avatar src='/' alt={cartItem.name}></Avatar>
+        )}
+
         <Typography display='flex' alignItems={"center"} variant='h5' px={4}>
           {cartItem.name}
         </Typography>
