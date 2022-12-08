@@ -6,8 +6,10 @@ const Orders = require("./routes/Orders");
 const ShoppingCarts = require("./routes/ShoppingCarts");
 const Reviews = require("./routes/Reviews");
 const Fooditems = require("./routes/FoodItems");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 
 mongoose.connect("mongodb://localhost/ueatsdb", () => {
   console.log("connected");

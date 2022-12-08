@@ -1,6 +1,6 @@
 import { colors } from "@mui/material";
 
-const mainColors = {
+export const mainColors = {
   darkGray: "#43423E",
   lightGray: colors.grey["100"],
   lightOrange: "#FDC566",
@@ -16,5 +16,4 @@ const colorConfigs = {
   },
   mainBg: mainColors.lightGray,
 };
-
 export default colorConfigs;
