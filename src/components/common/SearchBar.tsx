@@ -2,14 +2,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 
-export const filterData = (query: any, data: any) => {
-  if (!query) {
-    return data;
-  } else {
-    return data.filter((d: any) => d.title.toLowerCase().includes(query));
-  }
-};
-
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,

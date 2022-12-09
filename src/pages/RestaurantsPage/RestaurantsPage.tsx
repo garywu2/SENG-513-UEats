@@ -5,7 +5,6 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchBar from "../../components/common/SearchBar";
-import { filterData } from "../../components/common/SearchBar";
 import CustomModal from "../../components/common/CustomModal";
 import axios from "axios";
 import { setRestaurantsState } from "../../redux/features/appStateSlice";
@@ -22,10 +21,21 @@ const RestaurantsPage = () => {
       console.log(result.data);
       dispatch(setRestaurantsState(result.data));
     });
-  }, [dispatch, restaurants, setRestaurantsState]);
+  }, [dispatch]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const dataFiltered = filterData(searchQuery, restaurants);
+
+  const filterData = (data: any) => {
+    if (!searchQuery) {
+      return data;
+    } else {
+      return data.filter((d: any) =>
+        d.name.toLowerCase().includes(searchQuery)
+      );
+    }
+  };
+
+  const dataFiltered = filterData(restaurants);
 
   const [restaurantSelected, setRestaurantSelected] = useState(restaurants[0]);
 
@@ -51,8 +61,8 @@ const RestaurantsPage = () => {
               restaurant && (
                 <ImageListItem key={restaurant.name}>
                   <img
-                    src={`${assets.images.logo}?w=248&fit=crop&auto=format`}
-                    srcSet={`${assets.images.logo}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    src={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format`}
+                    srcSet={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={restaurant.name}
                     loading="lazy"
                   />
