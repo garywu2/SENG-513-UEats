@@ -44,35 +44,42 @@ const RestaurantsPage = () => {
           <SearchBar setSearchQuery={setSearchQuery} />
         </ImageListItem>
 
-        {dataFiltered.map((restaurant: any) => (
-          <ImageListItem key={restaurant.name}>
-            <img
-              src={`${assets.images.logo}?w=248&fit=crop&auto=format`}
-              srcSet={`${assets.images.logo}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={restaurant.name}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              title={restaurant.name}
-              subtitle={restaurant.author}
-              actionIcon={
-                <IconButton
-                  sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                  aria-label={`info about ${restaurant.name}`}
-                  onClick={handleOpen(restaurant)}
-                >
-                  <InfoIcon />
-                </IconButton>
-              }
-            />
-          </ImageListItem>
-        ))}
-        <CustomModal
-          title={restaurantSelected.name}
-          text={restaurantSelected.description}
-          open={open}
-          handleClose={handleClose}
-        />
+        {dataFiltered.length > 0 &&
+          dataFiltered[0] &&
+          dataFiltered.map(
+            (restaurant: any) =>
+              restaurant && (
+                <ImageListItem key={restaurant.name}>
+                  <img
+                    src={`${assets.images.logo}?w=248&fit=crop&auto=format`}
+                    srcSet={`${assets.images.logo}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    alt={restaurant.name}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    title={restaurant.name}
+                    subtitle={restaurant.author}
+                    actionIcon={
+                      <IconButton
+                        sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                        aria-label={`info about ${restaurant.name}`}
+                        onClick={handleOpen(restaurant)}
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    }
+                  />
+                </ImageListItem>
+              )
+          )}
+        {restaurantSelected && (
+          <CustomModal
+            title={restaurantSelected.name}
+            text={restaurantSelected.description}
+            open={open}
+            handleClose={handleClose}
+          />
+        )}
       </ImageList>
     </div>
   );
