@@ -29,7 +29,9 @@ const PageWrapper = (props: Props) => {
           .get(`http://localhost:5000/users/email/${data.email}`)
           .then((result: any) => {
             console.log(result);
-            dispatch(setUserInfoState(result.data));
+            if (result.data) {
+              dispatch(setUserInfoState(result.data));
+            }
           });
       }
     }

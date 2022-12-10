@@ -4,13 +4,17 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import ShoppingCartItem from "../../components/shoppingCart/ShoppingCartItem";
 import { mainColors } from "../../configs/colorConfigs";
 import { setFoodItemsState } from "../../redux/features/appStateSlice";
 
 const CartPage = () => {
-  const [foodItems, setFoodItems] = useState([]);
+  const [foodItems, setFoodItems]: any = useState([]);
   const [totalCost, setTotalCost] = useState(0);
+  const [error, setError] = useState(false);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const storeFoodItems = useSelector(
@@ -30,7 +34,9 @@ const CartPage = () => {
           )
           .then((result: any) => {
             console.log(result.data);
-            dispatch(setFoodItemsState(result.data));
+            if (result.data.length > 0) {
+              dispatch(setFoodItemsState(result.data));
+            }
           });
       }
     }
@@ -38,10 +44,22 @@ const CartPage = () => {
 
   useEffect(() => {
     let cost = 0;
+    let storeID = "";
+    let foundDuplicateStore = false;
+    if (foodItems.length > 0) {
+      storeID = foodItems[0].foodItem.store;
+    }
     foodItems.map((item: any) => {
       cost += item.foodItem.price * item.quantity;
+      if (item.foodItem.store !== storeID) {
+        setError(true);
+        foundDuplicateStore = true;
+      }
       return cost;
     });
+    if (!foundDuplicateStore) {
+      setError(false);
+    }
     setTotalCost(cost);
   }, [foodItems]);
 
@@ -101,6 +119,7 @@ const CartPage = () => {
         >
           Total Cost: ${totalCost}
         </Typography>
+
         <Button
           size='large'
           sx={{
@@ -109,10 +128,19 @@ const CartPage = () => {
             marginX: "2rem",
             minWidth: 200,
           }}
+          disabled={foodItems.length <= 0}
+          onClick={() => {
+            navigate("/payment");
+          }}
         >
           Create Order
         </Button>
       </Box>
+      {error && (
+        <Typography color={"red"}>
+          Found items from different stores. Please remove those items
+        </Typography>
+      )}
     </Box>
   );
 };

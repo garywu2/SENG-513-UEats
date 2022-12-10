@@ -7,6 +7,7 @@ import CartPage from "../pages/CartPage/CartPage";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import HomePage from "../pages/HomePage/HomePage";
 import OrderPage from "../pages/OrderPage/OrderPage";
+import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import RestaurantsPage from "../pages/RestaurantsPage/RestaurantsPage";
 import SettingPage from "../pages/Settings/SettingPage";
 import { RouteType } from "./config";
@@ -63,6 +64,11 @@ const appRoutes: RouteType[] = [
       displayText: "Settings Page",
       icon: <SettingsIcon />,
     },
+  },
+  {
+    path: "/payment",
+    element: <PaymentPage />,
+    state: "payment",
   },
 ];
 
