@@ -129,7 +129,7 @@ router.put("/quantity/food-item", async (req, res) => {
   }
 });
 
-//get  food items
+//empty shopping cart
 router.put("/empty", async (req, res) => {
   const id = req.body._id;
   if (!id) {
