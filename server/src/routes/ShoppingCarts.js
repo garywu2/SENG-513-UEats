@@ -129,4 +129,20 @@ router.put("/quantity/food-item", async (req, res) => {
   }
 });
 
+//empty shopping cart
+router.put("/empty", async (req, res) => {
+  const id = req.body._id;
+  if (!id) {
+    return res.status(400).json({ msg: "Cart id is missing" });
+  }
+  try {
+    const cart = await ShoppingCart.findOne({ _id: id });
+    cart.foodItems = [];
+    await cart.save();
+    res.json(cart.foodItems);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 module.exports = router;
