@@ -30,6 +30,12 @@ export const appStateSlice = createSlice({
     setUserInfoState: (state, action: any) => {
       state.userInfo = action.payload;
     },
+    resetState: (state) => {
+      state.appState = "";
+      state.cartFoodItems = [];
+      state.restaurants = [];
+      state.userInfo = {};
+    },
   },
 });
 
@@ -38,6 +44,7 @@ export const {
   setFoodItemsState,
   setRestaurantsState,
   setUserInfoState,
+  resetState,
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;
