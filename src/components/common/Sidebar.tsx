@@ -27,11 +27,15 @@ const Sidebar = () => {
   const checkUserBasedDisplay = (displayText: string) => {
     const lcText = displayText.toLowerCase();
     if (userInfo.type && userInfo.type === "client") {
-      if (lcText === "store") {
+      if (lcText === "store" || lcText === "manage users") {
         return false;
       }
     } else if (userInfo.type && userInfo.type === "vendor") {
-      if (lcText === "restaurants" || lcText === "shopping cart") {
+      if (
+        lcText === "restaurants" ||
+        lcText === "shopping cart" ||
+        lcText === "manage users"
+      ) {
         return false;
       }
     } else if (userInfo.type && userInfo.type === "admin") {
