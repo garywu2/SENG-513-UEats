@@ -43,6 +43,9 @@ const storeSchema = new mongoose.Schema({
   rating: {
     type: Number,
   },
+  image: {
+    data: String,
+  },
 });
 
 module.exports = mongoose.model("Store", storeSchema);

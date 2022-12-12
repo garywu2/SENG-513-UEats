@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type appState = {
   appState: string;
   cartFoodItems: any;
+  orders: any;
   restaurants: any;
   userInfo: any;
   foodItems: any;
@@ -11,6 +12,7 @@ type appState = {
 const initialState: appState = {
   appState: "",
   cartFoodItems: [],
+  orders: [],
   restaurants: [],
   userInfo: {},
   foodItems: {},
@@ -26,6 +28,9 @@ export const appStateSlice = createSlice({
     setCartFoodItemsState: (state, action: any) => {
       state.cartFoodItems = action.payload;
     },
+    setOrdersState: (state, action: any) => {
+      state.orders = action.payload;
+    },
     setRestaurantsState: (state, action: any) => {
       state.restaurants = action.payload;
     },
@@ -39,6 +44,7 @@ export const appStateSlice = createSlice({
     resetState: (state) => {
       state.appState = "";
       state.cartFoodItems = [];
+      state.orders = [];
       state.restaurants = [];
       state.userInfo = {};
       state.foodItems = {};
@@ -52,6 +58,7 @@ export const {
   setRestaurantsState,
   setUserInfoState,
   setFoodItemsState,
+  setOrdersState,
   resetState,
 } = appStateSlice.actions;
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fs = require("fs");
 const ShoppingCart = require("./models/ShoppingCart");
 const FoodItem = require("./models/FoodItem");
 const Order = require("./models/Order");
@@ -7,6 +8,7 @@ const Store = require("./models/Store");
 const Review = require("./models/Review");
 
 const { USER_TYPE, ORDER_STATUS, REVIEW_TYPE } = require("../src/constants");
+const path = require("path");
 
 mongoose.connect("mongodb://localhost/ueatsdb", () => {
   console.log("connected");
@@ -51,7 +53,8 @@ const saveStore = async (
   description,
   bankAccountNum,
   vendorID,
-  pickupLocation
+  pickupLocation,
+  image
 ) => {
   const store = new Store({
     name: name,
@@ -60,6 +63,7 @@ const saveStore = async (
     vendor: vendorID,
     pickupLocation: pickupLocation,
     rating: 5,
+    image: image,
   });
   try {
     await store.save();
@@ -70,9 +74,9 @@ const saveStore = async (
   console.log(`Store ${name} saved`);
 };
 
-const getStoreID = async () => {
+const getStoreID = async (index) => {
   const stores = await Store.find();
-  return stores[0]._id;
+  return stores[index]._id;
 };
 
 const addFoodItemsToStore = async (storeID, foodItems) => {
@@ -97,7 +101,8 @@ const saveFoodItem = async (
   price,
   description,
   availability,
-  storeID
+  storeID,
+  image
 ) => {
   const foodItem = new FoodItem({
     name: name,
@@ -105,6 +110,7 @@ const saveFoodItem = async (
     description: description,
     availability: availability,
     store: storeID,
+    image: image,
   });
   try {
     await foodItem.save();
@@ -222,28 +228,96 @@ const insertData = async () => {
     "Steve",
     "steve@gmail.com",
     "1234567895",
-    "steve",
+    "steve1",
+    USER_TYPE.vendor
+  );
+
+  await saveUser(
+    "Steve2",
+    "steve2@gmail.com",
+    "1234567896",
+    "steve2",
+    USER_TYPE.vendor
+  );
+
+  await saveUser(
+    "Steve3",
+    "steve3@gmail.com",
+    "1234567897",
+    "steve3",
     USER_TYPE.vendor
   );
 
   const vendorID = await getUserID("Steve");
+  const vendorID2 = await getUserID("Steve2");
+  const vendorID3 = await getUserID("Steve3");
   const clientID = await getUserID("John");
+  const clientID2 = await getUserID("Smith");
 
   await saveStore(
-    "Burger Store",
-    "we sell burgers!",
+    "Carl's Jr",
+    "We sell burgers!",
     "1234567895",
     vendorID,
-    "U of C"
+    "U of C",
+    {
+      data: fs.readFileSync(
+        path.resolve(__dirname, "./assets/images/stores/CarlsJr.png"),
+        { encoding: "base64" }
+      ),
+    }
+  );
+  await saveStore(
+    "Bake Chef",
+    "We sell subs!",
+    "1234567896",
+    vendorID2,
+    "U of C",
+    {
+      data: fs.readFileSync(
+        path.resolve(__dirname, "./assets/images/stores/bakechef.jpg"),
+        { encoding: "base64" }
+      ),
+    }
+  );
+  await saveStore(
+    "CPU Express",
+    "We sell the finest Canadian pizza",
+    "1234567897",
+    vendorID3,
+    "U of C",
+    {
+      data: fs.readFileSync(
+        path.resolve(__dirname, "./assets/images/stores/CPU.png"),
+        { encoding: "base64" }
+      ),
+    }
   );
 
-  const storeID = await getStoreID();
+  const storeID = await getStoreID(0);
+  const storeID1 = await getStoreID(1);
+  const storeID2 = await getStoreID(2);
 
-  await saveFoodItem("BB Burger", 10, "Beyond Meat Burger", true, storeID);
+  await saveFoodItem("Sub", 10, "Beef Satay", true, storeID, {
+    data: fs.readFileSync(
+      path.resolve(__dirname, "./assets/images/food-items/bake_chef_sub.jpeg"),
+      { encoding: "base64" }
+    ),
+  });
 
-  await saveFoodItem("M Burger", 12, "Meat Burger", true, storeID);
+  await saveFoodItem("M Burger", 12, "Meat Burger", true, storeID, {
+    data: fs.readFileSync(
+      path.resolve(__dirname, "./assets/images/food-items/burger.jpeg"),
+      { encoding: "base64" }
+    ),
+  });
 
-  await saveFoodItem("V Burger", 10, "Veggy Burger", true, storeID);
+  await saveFoodItem("V Burger", 10, "Veggy Burger", true, storeID, {
+    data: fs.readFileSync(
+      path.resolve(__dirname, "./assets/images/food-items/veggie_burger.jpg"),
+      { encoding: "base64" }
+    ),
+  });
 
   const foodItems = await getAllFoodItems();
 
@@ -257,6 +331,30 @@ const insertData = async () => {
   );
   await saveOrder(
     clientID,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+  await saveOrder(
+    clientID,
+    storeID1,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+  await saveOrder(
+    clientID,
+    storeID2,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+  await saveOrder(
+    clientID2,
     storeID,
     foodItems,
     new Date(),

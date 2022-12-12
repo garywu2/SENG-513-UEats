@@ -5,7 +5,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { mainColors } from "../../configs/colorConfigs";
-import { setCartFoodItemsState } from "../../redux/features/appStateSlice";
+import {
+  setCartFoodItemsState,
+  setOrdersState,
+} from "../../redux/features/appStateSlice";
 
 const PaymentPage = () => {
   const defaultValues = {
@@ -69,7 +72,8 @@ const PaymentPage = () => {
             .then((result: any) => {
               const emptyArray: any = [];
               dispatch(setCartFoodItemsState(emptyArray));
-              navigate("/cart");
+              dispatch(setOrdersState(emptyArray));
+              navigate("/orders");
             })
             .catch((e: any) => {
               console.log(e);
