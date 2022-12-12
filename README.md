@@ -26,6 +26,11 @@ Optionally you can also do the following to run the application
 - Run "npm install" to install all dependencies
 - Run "npm run dev-server" to start the live dev server
 
+Then on a seperate terminal while keeping the terminal running the server
+- In the root directory
+- Run "npm install" to install all dependencies
+- Run "npm run startClient" to start the front end
+
 ### populating the database
 
 - cd to the server directory
