@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -6,22 +6,10 @@ import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchBar from "../../components/common/SearchBar";
 import CustomModal from "../../components/common/CustomModal";
-import axios from "axios";
-import { setRestaurantsState } from "../../redux/features/appStateSlice";
-import { useDispatch, useSelector } from "react-redux";
-import assets from "../../assets";
+import useRestaurantsListener from "../../hooks/use-restaurants";
 
 const RestaurantsPage = () => {
-  const RESTAURANTS_ENDPOINT = "http://localhost:5000/stores";
-  const dispatch = useDispatch();
-  const restaurants = useSelector((state: any) => state.appState.restaurants);
-
-  useEffect(() => {
-    axios.get(RESTAURANTS_ENDPOINT).then((result: any) => {
-      console.log(result.data);
-      dispatch(setRestaurantsState(result.data));
-    });
-  }, [dispatch]);
+  const { restaurants } = useRestaurantsListener();
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -68,7 +56,6 @@ const RestaurantsPage = () => {
                   />
                   <ImageListItemBar
                     title={restaurant.name}
-                    subtitle={restaurant.author}
                     actionIcon={
                       <IconButton
                         sx={{ color: "rgba(255, 255, 255, 0.54)" }}
