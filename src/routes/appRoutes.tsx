@@ -10,7 +10,7 @@ import HomePage from "../pages/HomePage/HomePage";
 import OrderPage from "../pages/OrderPage/OrderPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import RestaurantsPage from "../pages/RestaurantsPage/RestaurantsPage";
-import SettingPage from "../pages/Settings/SettingPage";
+import SettingPage from "../pages/SettingsPage/SettingPage";
 import SignupPage from "../pages/Signup/SignupPage";
 import StorePage from "../pages/StorePage/StorePage";
 import { RouteType } from "./config";
