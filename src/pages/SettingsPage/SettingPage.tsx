@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserContext from "../../context/user";
 import { Box, Button, TextField, Typography, Tabs } from "@mui/material";
 import { mainColors } from "../../configs/colorConfigs";
-import { useNavigate } from "react-router-dom";
 import { updateEmail } from "firebase/auth";
 import { auth } from "../../lib/firebase"
+import {
+  setUserInfoState,
+} from "../../redux/features/appStateSlice";
 
 
 const SettingPage = () => {
@@ -18,13 +20,13 @@ const SettingPage = () => {
     username: userInfo.username,
     phoneNumber: userInfo.phoneNum,
   };
-  const navigate = useNavigate();
   const [updateState, setupdateState] = useState(settingFields);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setupdateState({ ...updateState, [name]: value });
   };
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const updateUserInfo = (e: any) => {
     if (
@@ -45,6 +47,7 @@ const SettingPage = () => {
       }).then((servResult: any) => {
         console.log(servResult);
         setError("");
+        dispatch(setUserInfoState(servResult.data));
       })
       .catch((e: any) => {
         setError(e.response.data.msg);
