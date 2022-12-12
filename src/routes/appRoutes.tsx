@@ -1,5 +1,6 @@
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -7,10 +8,11 @@ import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import CartPage from "../pages/CartPage/CartPage";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import HomePage from "../pages/HomePage/HomePage";
+import ManageUsersPage from "../pages/ManageUsersPage/ManageUsersPage";
 import OrderPage from "../pages/OrderPage/OrderPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import RestaurantsPage from "../pages/RestaurantsPage/RestaurantsPage";
-import SettingPage from "../pages/Settings/SettingPage";
+import SettingPage from "../pages/SettingsPage/SettingPage";
 import SignupPage from "../pages/Signup/SignupPage";
 import StorePage from "../pages/StorePage/StorePage";
 import { RouteType } from "./config";
@@ -30,6 +32,15 @@ const appRoutes: RouteType[] = [
     sidebarProps: {
       displayText: "Dashboard",
       icon: <DashboardOutlinedIcon />,
+    },
+  },
+  {
+    path: "/manage-users",
+    element: <ManageUsersPage />,
+    state: "manageUsers",
+    sidebarProps: {
+      displayText: "Manage Users",
+      icon: <ManageAccountsIcon />,
     },
   },
   {
@@ -60,21 +71,21 @@ const appRoutes: RouteType[] = [
     },
   },
   {
-    path: "/settings",
-    element: <SettingPage />,
-    state: "settings",
-    sidebarProps: {
-      displayText: "Settings",
-      icon: <SettingsIcon />,
-    },
-  },
-  {
     path: "/store",
     element: <StorePage />,
     state: "store",
     sidebarProps: {
       displayText: "Store",
       icon: <StoreMallDirectoryIcon />,
+    },
+  },
+  {
+    path: "/settings",
+    element: <SettingPage />,
+    state: "settings",
+    sidebarProps: {
+      displayText: "Settings",
+      icon: <SettingsIcon />,
     },
   },
   {

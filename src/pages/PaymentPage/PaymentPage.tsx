@@ -21,7 +21,7 @@ const PaymentPage = () => {
     pickupTime: "",
   };
   const [paymentstate, setPaymentState]: any = useState(defaultValues);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const cartItems = useSelector((state: any) => state.appState.cartFoodItems);
   const userInfo = useSelector((state: any) => state.appState.userInfo);
@@ -74,18 +74,19 @@ const PaymentPage = () => {
               dispatch(setCartFoodItemsState(emptyArray));
               dispatch(setOrdersState(emptyArray));
               navigate("/orders");
+              setError("");
             })
             .catch((e: any) => {
               console.log(e);
+              setError(e.response.data.msg);
             });
         })
         .catch((e: any) => {
           console.log(e);
+          setError(e.response.data.msg);
         });
-
-      setError(false);
     } else {
-      setError(true);
+      setError("Required field missing!");
     }
   };
 
@@ -174,9 +175,7 @@ const PaymentPage = () => {
         onChange={handleChange}
       />
 
-      {error && (
-        <Typography color={"red"}>Please fill all required forms.</Typography>
-      )}
+      {error && <Typography color={"red"}>{error}</Typography>}
       <Box
         display={"flex"}
         sx={{

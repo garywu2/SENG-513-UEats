@@ -134,6 +134,24 @@ router.put("/", async (req, res) => {
   }
 });
 
+//update a user, will update all attributes, id required
+router.put("/approve", async (req, res) => {
+  const id = req.body._id;
+  if (!id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
+
+  try {
+    const user = await User.findOne({ _id: id });
+    user.approvalStatus = true;
+    await user.save();
+    const users = await User.find();
+    res.json(users);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //delete a user, id required
 router.delete("/", async (req, res) => {
   const id = req.body._id;
@@ -152,7 +170,8 @@ router.delete("/", async (req, res) => {
       await ShoppingCart.deleteOne({ _id: user.shoppingCart });
     }
     await User.deleteOne({ _id: id });
-    res.json({ msg: "User deleted successfully" });
+    const users = await User.find();
+    res.json(users);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

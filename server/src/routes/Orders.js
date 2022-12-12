@@ -125,6 +125,7 @@ router.put("/process", async (req, res) => {
 //POST Request
 
 //creates order, set order status to active, add it to the store activeOrders array
+//will return 400 if pick up time out of store time range
 router.post("/", async (req, res) => {
   const order = {
     client: req.body.client,
@@ -143,11 +144,26 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ msg: "Order is missing a field" });
   }
   try {
+    const store = await Store.findOne({ _id: order.store });
+    if (
+      store.availabilityTime &&
+      store.availabilityTime.startTime &&
+      store.availabilityTime.endTime
+    ) {
+      const orderDateObject = new Date(order.pickupTime);
+      const orderHours = orderDateObject.getHours();
+      if (
+        parseInt(store.availabilityTime.endTime) < orderHours ||
+        parseInt(store.availabilityTime.startTime) > orderHours
+      ) {
+        return res.status(400).json({ msg: "Order time out of store hours." });
+      }
+    }
+
     const dbOrder = new Order(order);
     dbOrder.status = ORDER_STATUS.active;
     await dbOrder.save();
 
-    const store = await Store.findOne({ _id: order.store });
     store.activeOrders.push(dbOrder._id);
     await store.save();
 
