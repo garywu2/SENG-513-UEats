@@ -1,4 +1,4 @@
-import { Avatar, Button, Drawer, List, Stack, Toolbar } from "@mui/material";
+import { Avatar, Drawer, List, Stack, Toolbar } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import FirebaseContext from "../../context/firebase";
 import UserContext from "../../context/user";
 import { resetState } from "../../redux/features/appStateSlice";
 import appRoutes from "../../routes/appRoutes";
+import LogoutButton from "./LogoutButton";
 import SidebarItem from "./SidebarItem";
 
 const Sidebar = () => {
@@ -17,6 +18,11 @@ const Sidebar = () => {
   const userInfo = useSelector((state: any) => state.appState.userInfo);
 
   const dispatch = useDispatch();
+
+  const handleSignout = async () => {
+    await signOut(auth);
+    dispatch(resetState());
+  };
 
   const checkUserBasedDisplay = (displayText: string) => {
     const lcText = displayText.toLowerCase();
@@ -63,17 +69,7 @@ const Sidebar = () => {
             ) : null
           ) : null
         )}
-        {!!user && (
-          <Button
-            variant='contained'
-            onClick={async () => {
-              await signOut(auth);
-              dispatch(resetState());
-            }}
-          >
-            Logout
-          </Button>
-        )}
+        {!!user && <LogoutButton handleClick={handleSignout} />}
       </List>
     </Drawer>
   );
