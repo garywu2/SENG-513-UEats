@@ -260,11 +260,8 @@ const insertData = async () => {
   const vendorID2 = await getUserID("Steve2");
   const vendorID3 = await getUserID("Steve3");
   const clientID = await getUserID("John");
-<<<<<<< HEAD
   const clientIDuEats = await getUserID("Ueats");
-=======
   const clientID2 = await getUserID("Smith");
->>>>>>> b0b7beb848cd95518c6af550f3d8f1a74df1786d
 
   await saveStore(
     "Carl's Jr",
