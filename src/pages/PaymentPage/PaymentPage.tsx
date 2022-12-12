@@ -74,6 +74,7 @@ const PaymentPage = () => {
               dispatch(setFoodItemsState(emptyArray));
               dispatch(setOrdersState(emptyArray));
               navigate("/orders");
+              setError("");
             })
             .catch((e: any) => {
               console.log(e);
