@@ -87,7 +87,10 @@ router.get("/:_id/reviews", async (req, res) => {
   }
 });
 
+//availability times should be strings containg hour in 24-hr format
+//for example "availabilityTime": {"startTime": "08", "endTime": "17"}
 //POST requests
+
 router.post("/", async (req, res) => {
   const store = {
     name: req.body.name,
