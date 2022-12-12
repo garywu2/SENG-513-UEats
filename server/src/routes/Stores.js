@@ -4,6 +4,9 @@ const Store = require("../models/Store");
 const Review = require("../models/Review");
 const FoodItem = require("../models/FoodItem");
 const Order = require("../models/Order");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //get all stores
 router.get("/", async (req, res) => {
@@ -151,6 +154,22 @@ router.put("/", async (req, res) => {
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
+});
+
+//PUT request
+router.put("/upload", upload.single("image"), async (req, res) => {
+  if (!req.body._id) {
+    return res.status(400).json({ msg: "Store ID missing" });
+  }
+  const store = await Store.findOne({ _id: req.body._id });
+
+  if (!!req.file) {
+    store.image = {
+      data: req.file.buffer.toString("base64"),
+    };
+  }
+  await store.save();
+  res.json(store);
 });
 
 //delete a store, id required

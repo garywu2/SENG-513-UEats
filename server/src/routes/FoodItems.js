@@ -39,7 +39,7 @@ router.get("/:_id", async (req, res) => {
 router.get("/category/:category", async (req, res) => {
   const category = req.params.category;
   if (!category) {
-    return res.status(400).json({ msg: "Categoryis missing" });
+    return res.status(400).json({ msg: "Category is missing" });
   }
   try {
     const foodItems = await FoodItem.find({ categories: { $in: category } });
@@ -73,8 +73,7 @@ router.put("/", upload.single("image"), async (req, res) => {
   }
   if (!!req.file) {
     foodItem.image = {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
+      data: req.file.buffer.toString("base64"),
     };
   }
   await foodItem.save();
