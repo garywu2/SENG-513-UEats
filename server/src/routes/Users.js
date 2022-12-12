@@ -170,7 +170,8 @@ router.delete("/", async (req, res) => {
       await ShoppingCart.deleteOne({ _id: user.shoppingCart });
     }
     await User.deleteOne({ _id: id });
-    res.json({ msg: "User deleted successfully" });
+    const users = await User.find();
+    res.json(users);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

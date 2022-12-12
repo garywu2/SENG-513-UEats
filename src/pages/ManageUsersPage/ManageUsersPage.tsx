@@ -18,11 +18,26 @@ const ManageUsersPage = (props: any) => {
       });
   });
 
-  const handleApprove = (id: string) => {
+  const handleApprove = (id: any) => {
     axios
       .put("http://localhost:5000/users/approve", {
-        id: id,
+        _id: id,
         approvalStatus: true,
+      })
+      .then((result: any) => {
+        if (result.data) {
+          setUsers(result.data);
+        }
+      })
+      .catch((e: any) => {
+        console.log(e);
+      });
+  };
+
+  const removeUser = (id: any) => {
+    axios
+      .delete("http://localhost:5000/users", {
+        data: { _id: id },
       })
       .then((result: any) => {
         if (result.data) {
@@ -41,6 +56,7 @@ const ManageUsersPage = (props: any) => {
             <ManageUserCard
               {...user}
               handleApprove={handleApprove}
+              removeUser={removeUser}
               key={user._id}
             />
           );

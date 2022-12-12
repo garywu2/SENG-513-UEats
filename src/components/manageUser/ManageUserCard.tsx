@@ -44,6 +44,9 @@ const ManageUserCard = (props: any) => {
           <Button
             size='small'
             startIcon={<PersonRemoveIcon />}
+            onClick={() => {
+              props.removeUser(props._id);
+            }}
             sx={{
               backgroundColor: mainColors.darkGray,
               color: mainColors.lightOrange,
