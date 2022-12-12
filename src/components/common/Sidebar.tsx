@@ -94,24 +94,6 @@ const Sidebar = () => {
             ) : null
           ) : null
         )}
-        {!!user && (
-          <Button
-            sx={{
-              backgroundColor: colorConfigs.sidebar.bg,
-              color: colorConfigs.sidebar.color,
-              "&: hover": {
-                backgroundColor: colorConfigs.sidebar.hoverBg,
-              },
-              margin: "10px",
-            }}
-            variant="contained"
-            onClick={() => {
-              signOut(auth);
-            }}
-          >
-            {isMobile ? <LogoutIcon /> : "Logout"}
-          </Button>
-        )}
         {!!user && <LogoutButton handleClick={handleSignout} />}
       </List>
     </Drawer>
