@@ -2,12 +2,15 @@ import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { mainColors } from "../../configs/colorConfigs";
 import FirebaseContext from "../../context/firebase";
+import UserContext from "../../context/user";
 
 const SignupPage = () => {
   const { auth } = useContext(FirebaseContext);
+  const { user } = useContext(UserContext);
+
   const defaultValues = {
     name: "",
     email: "",
@@ -68,100 +71,106 @@ const SignupPage = () => {
   };
 
   return (
-    <Box
-      component='form'
-      display={"flex"}
-      flexDirection='column'
-      sx={{
-        "& .MuiTextField-root": { m: 1 },
-        "& label.Mui-focused": {
-          color: mainColors.darkGray,
-        },
+    <div>
+      {!user ? (
+        <Box
+          component='form'
+          display={"flex"}
+          flexDirection='column'
+          sx={{
+            "& .MuiTextField-root": { m: 1 },
+            "& label.Mui-focused": {
+              color: mainColors.darkGray,
+            },
 
-        "& .MuiOutlinedInput-root": {
-          "&.Mui-focused fieldset": {
-            borderColor: mainColors.lightOrange,
-          },
-        },
-        maxWidth: "600px",
-        margin: "auto",
-      }}
-      noValidate
-      autoComplete='off'
-    >
-      <div>
-        <TextField
-          required
-          id='signup-name'
-          label='Name'
-          name='name'
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          required
-          type='email'
-          id='signup-email'
-          label='Email'
-          name='email'
-          fullWidth
-          value={signupState.email}
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          id='signup-username'
-          label='Username'
-          name='username'
-          value={signupState.username}
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          id='signup-password'
-          label='Password'
-          type='password'
-          name='password'
-          value={signupState.password}
-          onChange={handleChange}
-        />
-
-        <TextField
-          required
-          id='signup-phone-number'
-          label='Phone Number'
-          type='tel'
-          value={signupState.phoneNumber}
-          onChange={handleChange}
-          name='phoneNumber'
-        />
-        <TextField
-          required
-          id='signup-type'
-          label='User Type'
-          name='type'
-          select
-          value={signupState.type}
-          sx={{ minWidth: "15ch" }}
-          onChange={handleChange}
+            "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                borderColor: mainColors.lightOrange,
+              },
+            },
+            maxWidth: "600px",
+            margin: "auto",
+          }}
+          noValidate
+          autoComplete='off'
         >
-          <MenuItem value='vendor'>Vendor</MenuItem>
-          <MenuItem value='client'>Client</MenuItem>
-        </TextField>
-      </div>
-      {error && <Typography color='red'>{error}</Typography>}
-      <Button
-        size='large'
-        sx={{
-          backgroundColor: mainColors.darkGray,
-          color: mainColors.lightOrange,
-          marginY: "1rem",
-        }}
-        onClick={handleSumbit}
-      >
-        Create User
-      </Button>
-    </Box>
+          <div>
+            <TextField
+              required
+              id='signup-name'
+              label='Name'
+              name='name'
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              required
+              type='email'
+              id='signup-email'
+              label='Email'
+              name='email'
+              fullWidth
+              value={signupState.email}
+              onChange={handleChange}
+            />
+            <TextField
+              required
+              id='signup-username'
+              label='Username'
+              name='username'
+              value={signupState.username}
+              onChange={handleChange}
+            />
+            <TextField
+              required
+              id='signup-password'
+              label='Password'
+              type='password'
+              name='password'
+              value={signupState.password}
+              onChange={handleChange}
+            />
+
+            <TextField
+              required
+              id='signup-phone-number'
+              label='Phone Number'
+              type='tel'
+              value={signupState.phoneNumber}
+              onChange={handleChange}
+              name='phoneNumber'
+            />
+            <TextField
+              required
+              id='signup-type'
+              label='User Type'
+              name='type'
+              select
+              value={signupState.type}
+              sx={{ minWidth: "15ch" }}
+              onChange={handleChange}
+            >
+              <MenuItem value='vendor'>Vendor</MenuItem>
+              <MenuItem value='client'>Client</MenuItem>
+            </TextField>
+          </div>
+          {error && <Typography color='red'>{error}</Typography>}
+          <Button
+            size='large'
+            sx={{
+              backgroundColor: mainColors.darkGray,
+              color: mainColors.lightOrange,
+              marginY: "1rem",
+            }}
+            onClick={handleSumbit}
+          >
+            Create User
+          </Button>
+        </Box>
+      ) : (
+        <Navigate to='/dashboard'></Navigate>
+      )}
+    </div>
   );
 };
 export default SignupPage;
