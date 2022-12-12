@@ -236,6 +236,7 @@ const insertData = async () => {
 
   const vendorID = await getUserID("Steve");
   const clientID = await getUserID("John");
+  const clientIDuEats = await getUserID("Ueats");
 
   await saveStore(
     "Burger Store",
@@ -271,13 +272,31 @@ const insertData = async () => {
     10,
     ORDER_STATUS.processed
   );
-
+  await saveOrder(
+    clientIDuEats,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.active
+  );
+  await saveOrder(
+    clientIDuEats,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+  
+  await saveShoppingCart(clientIDuEats, foodItems)
   await saveShoppingCart(clientID, foodItems);
 
   const processedOrders = await getProcessedOrders();
   const activeOrders = await getActiveOrders();
 
   addShoppingCartToUser(clientID);
+  addShoppingCartToUser(clientIDuEats);
   addStoreToUser(vendorID, storeID);
 
   await addOrdersToStore(storeID, processedOrders, activeOrders);
@@ -293,6 +312,22 @@ const insertData = async () => {
   );
   await saveReview(
     clientID,
+    storeID,
+    "Thanks John!",
+    new Date(),
+    REVIEW_TYPE.reply
+  );
+  addReviewParent();
+  await saveReview(
+    clientIDuEats,
+    storeID,
+    "Good stuff!",
+    new Date(),
+    REVIEW_TYPE.comment,
+    5
+  );
+  await saveReview(
+    clientIDuEats,
     storeID,
     "Thanks John!",
     new Date(),
