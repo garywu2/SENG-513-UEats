@@ -44,6 +44,20 @@ router.get("/:_id/food-items", async (req, res) => {
   }
 });
 
+//get order food items
+router.get("/user/:_id/", async (req, res) => {
+  const id = req.params._id;
+  if (!id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
+  try {
+    const userOrders = await Order.find({ client: id });
+    res.json(userOrders);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //PUT Requests
 
 //update order, id required, will update pickup time, food items and total cost
@@ -79,61 +93,6 @@ router.put("/", async (req, res) => {
     return res.status(400).json({ msg: e.message });
   }
 });
-
-//-----------------> Uncomment them if you need them
-
-// //add food item to order, updates total price
-// //food item id and quantity required
-
-// router.put("/order/add/food-item", async (req, res) => {
-//   const orderID = req.body._id;
-//   const foodItemID = req.body.foodItem;
-//   const quantity = req.body.quantity;
-
-//   if (!orderID || !foodItemID || !quantity) {
-//     return res
-//       .status(400)
-//       .json({ msg: "One of the required attributes is missing" });
-//   }
-
-//   try {
-//     const order = await Order.findOne({ _id: orderID });
-//     order.foodItems.push({ foodItem: foodItemID, quantity: quantity });
-//     const foodItem = FoodItem.findOne({ _id: foodItemID });
-//     order.totalCost += foodItem.price * quantity;
-//     await order.save();
-//     res.json(order);
-//   } catch (e) {
-//     return res.status(400).json({ msg: e.message });
-//   }
-// });
-
-// //remove food item from order, updates total price
-// //food item id required
-
-// router.put("/order/remove/food-item", async (req, res) => {
-//   const orderID = req.body._id;
-//   const foodItemID = req.body.foodItem;
-
-//   if (!orderID || !foodItemID) {
-//     return res
-//       .status(400)
-//       .json({ msg: "One of the required attributes is missing" });
-//   }
-
-//   try {
-//     const order = await Order.findOne({ _id: orderID });
-//     order.foodItems = order.foodItems.filter((item) => {
-//       return item.foodItem.toString() !== foodItemID;
-//     });
-//     const foodItem = FoodItem.findOne({ _id: foodItemID });
-//     order.totalCost -= foodItem.price * foodItem.quantity;
-//     await order.save();
-//     res.json(order);
-//   } catch (e) {
-//     return res.status(400).json({ msg: e.message });
-//   }
-// });
 
 // process order, require store and order id
 //Sets order status to processed, removes it from store processedOrders array

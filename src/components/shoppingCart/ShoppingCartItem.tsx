@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Buffer } from "buffer";
 import { useEffect, useState } from "react";
 import { mainColors } from "../../configs/colorConfigs";
 
@@ -37,43 +36,41 @@ const ShoppingCartItem = (props: any) => {
       }}
     >
       <Box
-        display='flex'
+        display="flex"
         flexDirection={"row"}
-        alignContent='start'
-        justifyContent='space-evenly'
-        margin='auto'
+        alignContent="start"
+        justifyContent="space-evenly"
+        margin="auto"
       >
         {!!cartItem.image ? (
           <Avatar
-            src={`data:${cartItem.image.contentType};base64,${Buffer.from(
-              cartItem.image.data
-            ).toString("base64")}`}
+            src={`data:image/png;base64, ${cartItem.image.data}`}
           ></Avatar>
         ) : (
-          <Avatar src='/' alt={cartItem.name}></Avatar>
+          <Avatar src="/" alt={cartItem.name}></Avatar>
         )}
 
-        <Typography display='flex' alignItems={"center"} variant='h5' px={4}>
+        <Typography display="flex" alignItems={"center"} variant="h5" px={4}>
           {cartItem.name}
         </Typography>
-        <Typography display='flex' alignItems={"center"} variant='h5'>
+        <Typography display="flex" alignItems={"center"} variant="h5">
           ${cartItem.price}
         </Typography>
       </Box>
       <Box
-        display='flex'
+        display="flex"
         flexDirection={"row"}
-        alignContent='start'
-        justifyContent='center'
-        margin='auto'
+        alignContent="start"
+        justifyContent="center"
+        margin="auto"
         marginTop={"1rem"}
-        marginRight='3rem'
+        marginRight="3rem"
       >
         <TextField
-          size='small'
-          variant='outlined'
+          size="small"
+          variant="outlined"
           select
-          label='Quant'
+          label="Quant"
           value={quantity}
           onChange={handleQuantityChange}
           sx={{ width: "10ch", marginRight: "2rem" }}
@@ -88,8 +85,8 @@ const ShoppingCartItem = (props: any) => {
         </TextField>
 
         <Fab
-          aria-label='delete'
-          size='small'
+          aria-label="delete"
+          size="small"
           sx={{
             color: mainColors.lightOrange,
             backgroundColor: mainColors.darkGray,
