@@ -225,6 +225,14 @@ const insertData = async () => {
   );
 
   await saveUser(
+    "Ueats",
+    "ueats@testmail.com",
+    "1234567895",
+    "Ueats",
+    USER_TYPE.client
+  );
+
+  await saveUser(
     "Steve",
     "steve@gmail.com",
     "1234567895",
@@ -252,6 +260,7 @@ const insertData = async () => {
   const vendorID2 = await getUserID("Steve2");
   const vendorID3 = await getUserID("Steve3");
   const clientID = await getUserID("John");
+  const clientIDuEats = await getUserID("Ueats");
   const clientID2 = await getUserID("Smith");
 
   await saveStore(
@@ -338,6 +347,14 @@ const insertData = async () => {
     ORDER_STATUS.processed
   );
   await saveOrder(
+    clientIDuEats,
+    storeID,
+    foodItems,
+    new Date(),
+    10,
+    ORDER_STATUS.processed
+  );
+  await saveOrder(
     clientID,
     storeID1,
     foodItems,
@@ -361,13 +378,15 @@ const insertData = async () => {
     10,
     ORDER_STATUS.processed
   );
-
+  
+  await saveShoppingCart(clientIDuEats, foodItems)
   await saveShoppingCart(clientID, foodItems);
 
   const processedOrders = await getProcessedOrders();
   const activeOrders = await getActiveOrders();
 
   addShoppingCartToUser(clientID);
+  addShoppingCartToUser(clientIDuEats);
   addStoreToUser(vendorID, storeID);
 
   await addOrdersToStore(storeID, processedOrders, activeOrders);
@@ -383,6 +402,22 @@ const insertData = async () => {
   );
   await saveReview(
     clientID,
+    storeID,
+    "Thanks John!",
+    new Date(),
+    REVIEW_TYPE.reply
+  );
+  addReviewParent();
+  await saveReview(
+    clientIDuEats,
+    storeID,
+    "Good stuff!",
+    new Date(),
+    REVIEW_TYPE.comment,
+    5
+  );
+  await saveReview(
+    clientIDuEats,
     storeID,
     "Thanks John!",
     new Date(),
