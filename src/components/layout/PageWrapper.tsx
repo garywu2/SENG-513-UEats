@@ -42,7 +42,7 @@ const PageWrapper = (props: Props) => {
       {!!user || props.state === "home" || props.state === "signup" ? (
         props.children
       ) : (
-        <Navigate to='/' />
+        <Navigate to="/" />
       )}{" "}
     </>
   );

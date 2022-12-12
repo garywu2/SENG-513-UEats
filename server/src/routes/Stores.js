@@ -4,6 +4,9 @@ const Store = require("../models/Store");
 const Review = require("../models/Review");
 const FoodItem = require("../models/FoodItem");
 const Order = require("../models/Order");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //get all stores
 router.get("/", async (req, res) => {
@@ -87,8 +90,10 @@ router.get("/:_id/reviews", async (req, res) => {
   }
 });
 
+//availability times should be strings containg hour in 24-hr format
+//for example "availabilityTime": {"startTime": "08", "endTime": "17"}
 //POST requests
-router.post("/", async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   const store = {
     name: req.body.name,
     description: req.body.description,
@@ -96,6 +101,9 @@ router.post("/", async (req, res) => {
     bankAccountNum: req.body.bankAccountNum,
     availabilityTime: req.body.availabilityTime,
     pickupLocation: req.body.pickupLocation,
+    image: {
+      data: req.file.buffer.toString("base64"),
+    },
   };
 
   if (
@@ -104,7 +112,8 @@ router.post("/", async (req, res) => {
     !store.description ||
     !store.bankAccountNum ||
     !store.availabilityTime ||
-    !store.pickupLocation
+    !store.pickupLocation ||
+    !store.image
   ) {
     return res.status(400).json({ msg: "Store is missing a mandatory field" });
   }
@@ -123,7 +132,7 @@ router.post("/", async (req, res) => {
 //use order process endpoints
 //rating will automatically updated when reviews are added or changed
 //food items will be automatically added or removed when a food item is added or removed
-router.put("/", async (req, res) => {
+router.put("/", upload.single("image"), async (req, res) => {
   const newAttrs = req.body;
   const attrKeys = Object.keys(newAttrs);
 
@@ -146,6 +155,12 @@ router.put("/", async (req, res) => {
         store[key] = newAttrs[key];
       }
     });
+
+    if (!!req.file) {
+      store.image = {
+        data: req.file.buffer.toString("base64"),
+      };
+    }
     await store.save();
     res.json(store);
   } catch (e) {

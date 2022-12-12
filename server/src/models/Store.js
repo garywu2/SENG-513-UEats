@@ -24,8 +24,8 @@ const storeSchema = new mongoose.Schema({
   },
   availabilityTime: {
     type: {
-      startTime: { type: Date, required: true },
-      endTime: { type: Date, required: true },
+      startTime: { type: String, required: true },
+      endTime: { type: String, required: true },
     },
   },
   pickupLocation: {
@@ -42,6 +42,9 @@ const storeSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
+  },
+  image: {
+    data: String,
   },
 });
 

@@ -5,7 +5,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { mainColors } from "../../configs/colorConfigs";
-import { setFoodItemsState } from "../../redux/features/appStateSlice";
+import {
+  setFoodItemsState,
+  setOrdersState,
+} from "../../redux/features/appStateSlice";
 
 const PaymentPage = () => {
   const defaultValues = {
@@ -18,7 +21,7 @@ const PaymentPage = () => {
     pickupTime: "",
   };
   const [paymentstate, setPaymentState]: any = useState(defaultValues);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const cartItems = useSelector((state: any) => state.appState.cartFoodItems);
   const userInfo = useSelector((state: any) => state.appState.userInfo);
@@ -69,25 +72,27 @@ const PaymentPage = () => {
             .then((result: any) => {
               const emptyArray: any = [];
               dispatch(setFoodItemsState(emptyArray));
-              navigate("/cart");
+              dispatch(setOrdersState(emptyArray));
+              navigate("/orders");
+              setError("");
             })
             .catch((e: any) => {
               console.log(e);
+              setError(e.response.data.msg);
             });
         })
         .catch((e: any) => {
           console.log(e);
+          setError(e.response.data.msg);
         });
-
-      setError(false);
     } else {
-      setError(true);
+      setError("Required field missing!");
     }
   };
 
   return (
     <Box
-      component='form'
+      component="form"
       sx={{
         "& .MuiTextField-root": { m: 1 },
         bgcolor: "background.paper",
@@ -98,71 +103,71 @@ const PaymentPage = () => {
         minWidth: 200,
       }}
       noValidate
-      autoComplete='off'
+      autoComplete="off"
     >
       <TextField
         required
-        id='client-name'
-        label='Name'
-        name='name'
-        color='warning'
+        id="client-name"
+        label="Name"
+        name="name"
+        color="warning"
         value={paymentstate.name}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-address'
-        label='Address'
-        name='address'
+        id="client-address"
+        label="Address"
+        name="address"
         sx={{ width: "60%" }}
-        color='warning'
+        color="warning"
         value={paymentstate.address}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-city'
-        label='City'
-        name='city'
-        color='warning'
+        id="client-city"
+        label="City"
+        name="city"
+        color="warning"
         value={paymentstate.city}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-province'
-        label='Province'
-        color='warning'
-        name='province'
+        id="client-province"
+        label="Province"
+        color="warning"
+        name="province"
         value={paymentstate.province}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-card'
-        label='Card Number'
+        id="client-card"
+        label="Card Number"
         sx={{ width: "60%" }}
-        name='card'
-        color='warning'
+        name="card"
+        color="warning"
         value={paymentstate.card}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-card-ccv'
-        label='CCV'
-        color='warning'
-        name='ccv'
+        id="client-card-ccv"
+        label="CCV"
+        color="warning"
+        name="ccv"
         value={paymentstate.ccv}
         onChange={handleChange}
       />
       <TextField
         required
-        id='client-pickup-time'
-        label='Pickup Time'
-        color='warning'
-        name='pickupTime'
-        type='datetime-local'
+        id="client-pickup-time"
+        label="Pickup Time"
+        color="warning"
+        name="pickupTime"
+        type="datetime-local"
         InputLabelProps={{
           shrink: true,
         }}
@@ -170,9 +175,7 @@ const PaymentPage = () => {
         onChange={handleChange}
       />
 
-      {error && (
-        <Typography color={"red"}>Please fill all required forms.</Typography>
-      )}
+      {error && <Typography color={"red"}>{error}</Typography>}
       <Box
         display={"flex"}
         sx={{
@@ -181,7 +184,7 @@ const PaymentPage = () => {
         }}
       >
         <Button
-          size='large'
+          size="large"
           sx={{
             backgroundColor: mainColors.darkGray,
             color: mainColors.lightOrange,

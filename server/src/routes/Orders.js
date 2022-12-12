@@ -44,6 +44,20 @@ router.get("/:_id/food-items", async (req, res) => {
   }
 });
 
+//get order food items
+router.get("/user/:_id/", async (req, res) => {
+  const id = req.params._id;
+  if (!id) {
+    return res.status(400).json({ msg: "User id is missing" });
+  }
+  try {
+    const userOrders = await Order.find({ client: id });
+    res.json(userOrders);
+  } catch (e) {
+    return res.status(400).json({ msg: e.message });
+  }
+});
+
 //PUT Requests
 
 //update order, id required, will update pickup time, food items and total cost
@@ -80,61 +94,6 @@ router.put("/", async (req, res) => {
   }
 });
 
-//-----------------> Uncomment them if you need them
-
-// //add food item to order, updates total price
-// //food item id and quantity required
-
-// router.put("/order/add/food-item", async (req, res) => {
-//   const orderID = req.body._id;
-//   const foodItemID = req.body.foodItem;
-//   const quantity = req.body.quantity;
-
-//   if (!orderID || !foodItemID || !quantity) {
-//     return res
-//       .status(400)
-//       .json({ msg: "One of the required attributes is missing" });
-//   }
-
-//   try {
-//     const order = await Order.findOne({ _id: orderID });
-//     order.foodItems.push({ foodItem: foodItemID, quantity: quantity });
-//     const foodItem = FoodItem.findOne({ _id: foodItemID });
-//     order.totalCost += foodItem.price * quantity;
-//     await order.save();
-//     res.json(order);
-//   } catch (e) {
-//     return res.status(400).json({ msg: e.message });
-//   }
-// });
-
-// //remove food item from order, updates total price
-// //food item id required
-
-// router.put("/order/remove/food-item", async (req, res) => {
-//   const orderID = req.body._id;
-//   const foodItemID = req.body.foodItem;
-
-//   if (!orderID || !foodItemID) {
-//     return res
-//       .status(400)
-//       .json({ msg: "One of the required attributes is missing" });
-//   }
-
-//   try {
-//     const order = await Order.findOne({ _id: orderID });
-//     order.foodItems = order.foodItems.filter((item) => {
-//       return item.foodItem.toString() !== foodItemID;
-//     });
-//     const foodItem = FoodItem.findOne({ _id: foodItemID });
-//     order.totalCost -= foodItem.price * foodItem.quantity;
-//     await order.save();
-//     res.json(order);
-//   } catch (e) {
-//     return res.status(400).json({ msg: e.message });
-//   }
-// });
-
 // process order, require store and order id
 //Sets order status to processed, removes it from store processedOrders array
 //and adds it to the processedOrders array
@@ -166,6 +125,7 @@ router.put("/process", async (req, res) => {
 //POST Request
 
 //creates order, set order status to active, add it to the store activeOrders array
+//will return 400 if pick up time out of store time range
 router.post("/", async (req, res) => {
   const order = {
     client: req.body.client,
@@ -184,11 +144,26 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ msg: "Order is missing a field" });
   }
   try {
+    const store = await Store.findOne({ _id: order.store });
+    if (
+      store.availabilityTime &&
+      store.availabilityTime.startTime &&
+      store.availabilityTime.endTime
+    ) {
+      const orderDateObject = new Date(order.pickupTime);
+      const orderHours = orderDateObject.getHours();
+      if (
+        parseInt(store.availabilityTime.endTime) < orderHours ||
+        parseInt(store.availabilityTime.startTime) > orderHours
+      ) {
+        return res.status(400).json({ msg: "Order time out of store hours." });
+      }
+    }
+
     const dbOrder = new Order(order);
     dbOrder.status = ORDER_STATUS.active;
     await dbOrder.save();
 
-    const store = await Store.findOne({ _id: order.store });
     store.activeOrders.push(dbOrder._id);
     await store.save();
 

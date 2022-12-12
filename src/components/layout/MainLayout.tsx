@@ -1,5 +1,11 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { Box, Collapse, IconButton, Toolbar } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Toolbar,
+  useMediaQuery,
+} from "@mui/material";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import colorConfigs from "../../configs/colorConfigs";
@@ -11,34 +17,40 @@ type Props = {
 };
 
 const MainLayout = (props: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <Box sx={{ display: "flex" }}>
       {!!props.user && (
-        <Collapse in={open} orientation='horizontal'>
-          <Box
-            component='nav'
-            sx={{
-              width: sizeConfigs.sidebar.width,
-              flexShrink: 0,
-            }}
-          >
+        <Collapse
+          in={open || isMobile}
+          orientation="horizontal"
+          sx={{
+            width: isMobile
+              ? sizeConfigs.mobileSideBar.width
+              : sizeConfigs.sidebar.width,
+            flexShrink: 0,
+          }}
+        >
+          <Box component="nav">
             <Sidebar />
           </Box>
         </Collapse>
       )}
 
-      <div style={{ zIndex: "10000" }}>
-        <IconButton
-          area-label='collapse'
-          onClick={() => setOpen((state) => !open)}
-        >
-          <MenuIcon />
-        </IconButton>
-      </div>
+      {!isMobile && (
+        <div style={{ zIndex: "10000", height: "50px" }}>
+          <IconButton
+            area-label="collapse"
+            onClick={() => setOpen((state) => !state)}
+          >
+            <MenuIcon />
+          </IconButton>
+        </div>
+      )}
 
       <Box
-        component='main'
+        component="main"
         sx={{
           flexGrow: 1,
           p: 3,
