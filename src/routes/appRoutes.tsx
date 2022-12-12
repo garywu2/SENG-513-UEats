@@ -3,6 +3,7 @@ import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import CartPage from "../pages/CartPage/CartPage";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import HomePage from "../pages/HomePage/HomePage";
@@ -10,6 +11,8 @@ import OrderPage from "../pages/OrderPage/OrderPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import RestaurantsPage from "../pages/RestaurantsPage/RestaurantsPage";
 import SettingPage from "../pages/Settings/SettingPage";
+import SignupPage from "../pages/Signup/SignupPage";
+import StorePage from "../pages/StorePage/StorePage";
 import { RouteType } from "./config";
 
 // TODO include/exclude certain options based on the user type (admin shouldn't see Orders and Shopping Cart in the Sidebar)
@@ -61,14 +64,28 @@ const appRoutes: RouteType[] = [
     element: <SettingPage />,
     state: "settings",
     sidebarProps: {
-      displayText: "Settings Page",
+      displayText: "Settings",
       icon: <SettingsIcon />,
+    },
+  },
+  {
+    path: "/store",
+    element: <StorePage />,
+    state: "store",
+    sidebarProps: {
+      displayText: "Store",
+      icon: <StoreMallDirectoryIcon />,
     },
   },
   {
     path: "/payment",
     element: <PaymentPage />,
     state: "payment",
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+    state: "signup",
   },
 ];
 
