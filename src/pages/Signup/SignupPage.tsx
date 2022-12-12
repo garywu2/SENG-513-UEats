@@ -101,6 +101,7 @@ const SignupPage = () => {
               label='Name'
               name='name'
               onChange={handleChange}
+              value={signupState.name}
               fullWidth
             />
             <TextField
