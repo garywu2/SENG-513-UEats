@@ -91,7 +91,7 @@ router.get("/:_id/reviews", async (req, res) => {
 });
 
 //POST requests
-router.post("/", async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   const store = {
     name: req.body.name,
     description: req.body.description,
@@ -99,6 +99,9 @@ router.post("/", async (req, res) => {
     bankAccountNum: req.body.bankAccountNum,
     availabilityTime: req.body.availabilityTime,
     pickupLocation: req.body.pickupLocation,
+    image: {
+      data: req.file.buffer.toString("base64"),
+    },
   };
 
   if (
@@ -107,7 +110,8 @@ router.post("/", async (req, res) => {
     !store.description ||
     !store.bankAccountNum ||
     !store.availabilityTime ||
-    !store.pickupLocation
+    !store.pickupLocation ||
+    !store.image
   ) {
     return res.status(400).json({ msg: "Store is missing a mandatory field" });
   }
