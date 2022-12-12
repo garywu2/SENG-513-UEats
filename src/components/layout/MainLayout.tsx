@@ -22,16 +22,17 @@ const MainLayout = (props: Props) => {
   return (
     <Box sx={{ display: "flex" }}>
       {!!props.user && (
-        <Collapse in={open || isMobile} orientation="horizontal">
-          <Box
-            component="nav"
-            sx={{
-              width: isMobile
-                ? sizeConfigs.mobileSideBar.width
-                : sizeConfigs.sidebar.width,
-              flexShrink: 0,
-            }}
-          >
+        <Collapse
+          in={open || isMobile}
+          orientation="horizontal"
+          sx={{
+            width: isMobile
+              ? sizeConfigs.mobileSideBar.width
+              : sizeConfigs.sidebar.width,
+            flexShrink: 0,
+          }}
+        >
+          <Box component="nav">
             <Sidebar />
           </Box>
         </Collapse>
