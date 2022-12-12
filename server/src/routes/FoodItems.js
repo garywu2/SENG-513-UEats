@@ -91,8 +91,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     availability: req.body.availability,
     store: req.body.store,
     image: {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
+      data: req.file.buffer.toString("base64"),
     },
   };
 
