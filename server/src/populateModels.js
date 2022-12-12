@@ -219,6 +219,14 @@ const insertData = async () => {
   );
 
   await saveUser(
+    "Ueats",
+    "ueats@testmail.com",
+    "1234567895",
+    "Ueats",
+    USER_TYPE.client
+  );
+
+  await saveUser(
     "Steve",
     "steve@gmail.com",
     "1234567895",
