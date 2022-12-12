@@ -14,13 +14,6 @@ export const apiSlice: any = createApi({
     getOrderFoodItems: builder.query({
       query: (id: any) => `/orders/${id}/food-items`,
     }),
-    updateCartItemQuantity: builder.mutation({
-      query: (body) => ({
-        url: `shopping-carts/quantity/food-item`,
-        method: "PUT",
-        body: body,
-      }),
-    }),
   }),
 });
 
