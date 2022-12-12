@@ -126,7 +126,7 @@ router.post("/", async (req, res) => {
 //use order process endpoints
 //rating will automatically updated when reviews are added or changed
 //food items will be automatically added or removed when a food item is added or removed
-router.put("/", async (req, res) => {
+router.put("/", upload.single("image"), async (req, res) => {
   const newAttrs = req.body;
   const attrKeys = Object.keys(newAttrs);
 
@@ -149,27 +149,17 @@ router.put("/", async (req, res) => {
         store[key] = newAttrs[key];
       }
     });
+
+    if (!!req.file) {
+      store.image = {
+        data: req.file.buffer.toString("base64"),
+      };
+    }
     await store.save();
     res.json(store);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
-});
-
-//PUT request
-router.put("/upload", upload.single("image"), async (req, res) => {
-  if (!req.body._id) {
-    return res.status(400).json({ msg: "Store ID missing" });
-  }
-  const store = await Store.findOne({ _id: req.body._id });
-
-  if (!!req.file) {
-    store.image = {
-      data: req.file.buffer.toString("base64"),
-    };
-  }
-  await store.save();
-  res.json(store);
 });
 
 //delete a store, id required
