@@ -13,6 +13,7 @@ const styles = {
     backgroundSize: "cover",
     backgroundImage: `url(${assets.images.orange_background})`,
     color: "white",
+    marginBottom: "5%",
   },
   LearnMoreButton: {
     backgroundColor: mainColors.lightGray,

@@ -1,13 +1,12 @@
 import { useSelector } from "react-redux";
 import Announcement from "../../components/dashboard/Announcement";
 import Carousel from "react-material-ui-carousel";
-import { Button, Paper, Rating } from "@mui/material";
+import { Button, CardMedia, Paper, Rating } from "@mui/material";
 import useRestaurantsListener from "../../hooks/use-restaurants";
 import useFoodItemsListener from "../../hooks/use-food-items";
 import { mainColors } from "../../configs/colorConfigs";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import useOrdersListener from "../../hooks/use-orders";
-import OrderCard from "../../components/order/OrderCard";
 import { useGetStoreQuery } from "../../redux/features/apiSlice";
 
 const styles = {
@@ -136,6 +135,13 @@ const Dashboard = () => {
 function RestaurantItem(props: any) {
   return (
     <Paper style={styles.CarouselItem}>
+      <CardMedia
+        component="img"
+        width="200px"
+        height="200px"
+        image={`data:image/png;base64, ${props.item.image.data}`}
+        alt={props.item.name}
+      />
       <h2>{props.item.name}</h2>
       <p>{props.item.description}</p>
       <Rating name="disabled" value={props.item.rating} disabled />
