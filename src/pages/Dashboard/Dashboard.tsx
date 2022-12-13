@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Announcement from "../../components/dashboard/Announcement";
 import Carousel from "react-material-ui-carousel";
@@ -32,6 +33,7 @@ const styles = {
 };
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const userInfo = useSelector((state: any) => state.appState.userInfo);
 
   const { restaurants } = useRestaurantsListener();
@@ -52,7 +54,11 @@ const Dashboard = () => {
         text="As UEAT's beta user, you may be eligible for a discount voucher! Click the button below to learn more!"
       />
       <h2>Popular Restaurants</h2>
-      <Button sx={styles.ViewAllButton} size="large" href={"/restaurants"}>
+      <Button
+        sx={styles.ViewAllButton}
+        size="large"
+        onClick={(e) => navigate("/restaurants")}
+      >
         View All Stores
         <ArrowCircleRightIcon
           sx={{
@@ -91,7 +97,11 @@ const Dashboard = () => {
       </div>
 
       <h2>Past Orders</h2>
-      <Button sx={styles.ViewAllButton} size="large" href={"/orders"}>
+      <Button
+        sx={styles.ViewAllButton}
+        size="large"
+        onClick={(e) => navigate("/orders")}
+      >
         View All Orders
         <ArrowCircleRightIcon
           sx={{
@@ -153,7 +163,7 @@ function OrderItem(props: any) {
   const { data: storeData } = useGetStoreQuery(props.item.store);
   return (
     <Paper style={styles.CarouselItem}>
-      <h2>{storeData.name}</h2>
+      {storeData && <h2>{storeData.name}</h2>}
       <p>{props.item.pickupTime}</p>
     </Paper>
   );

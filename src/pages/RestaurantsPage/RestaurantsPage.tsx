@@ -59,6 +59,10 @@ const RestaurantsPage = () => {
                   height="200px"
                   image={`data:image/png;base64, ${restaurant.image.data}`}
                   alt={restaurant.name}
+                  onClick={() => {
+                    navigate(`/restaurant/${restaurant._id}`);
+                  }}
+                  sx={{ cursor: "pointer" }}
                 />
                 <ImageListItemBar
                   title={restaurant.name}

@@ -15,25 +15,21 @@ const OrderPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (storeOrders && storeOrders.length > 0) {
-      setOrders(orders);
-    } else {
-      if (userInfo && userInfo._id) {
-        if (userInfo.type && userInfo.type === "vendor") {
-          axios
-            .get(`http://localhost:5000/stores/${userInfo.store}/orders`)
-            .then((result: any) => {
-              dispatch(setOrdersState(result.data));
-              setOrders(result.data);
-            });
-        } else {
-          axios
-            .get(`http://localhost:5000/orders/user/${userInfo._id}`)
-            .then((result: any) => {
-              dispatch(setOrdersState(result.data));
-              setOrders(result.data);
-            });
-        }
+    if (userInfo && userInfo._id) {
+      if (userInfo.type && userInfo.type === "vendor") {
+        axios
+          .get(`http://localhost:5000/stores/${userInfo.store}/orders`)
+          .then((result: any) => {
+            dispatch(setOrdersState(result.data));
+            setOrders(result.data);
+          });
+      } else {
+        axios
+          .get(`http://localhost:5000/orders/user/${userInfo._id}`)
+          .then((result: any) => {
+            dispatch(setOrdersState(result.data));
+            setOrders(result.data);
+          });
       }
     }
   }, [dispatch, userInfo]);
