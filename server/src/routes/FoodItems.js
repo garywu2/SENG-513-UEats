@@ -119,7 +119,9 @@ router.post("/", upload.single("image"), async (req, res) => {
     return res.status(400).json({ msg: e.message });
   }
 
-  res.json({ msg: "Food item saved" });
+  const foodItems = await FoodItem.find();
+
+  res.json(foodItems);
 });
 
 //delete a food item, id required
