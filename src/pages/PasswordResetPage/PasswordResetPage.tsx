@@ -30,7 +30,7 @@ const PasswordResetPage = () => {
 
   return (
     <div>
-      <h1 style={{display:'flex', textAlign:'center', justifyContent:'center'}}>Current Account Information</h1>
+      <h1 style={{display:'flex', textAlign:'center', justifyContent:'center'}}>Password Reset</h1>
         <Box
           component='form'
           display={"flex"}
