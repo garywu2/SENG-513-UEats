@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import InfoIcon from "@mui/icons-material/Info";
+import IconButton from "@mui/material/IconButton";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import IconButton from "@mui/material/IconButton";
-import InfoIcon from "@mui/icons-material/Info";
-import SearchBar from "../../components/common/SearchBar";
-import CustomModal from "../../components/common/CustomModal";
 import axios from "axios";
-import { setRestaurantsState } from "../../redux/features/appStateSlice";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import assets from "../../assets";
+import { useNavigate } from "react-router-dom";
+import CustomModal from "../../components/common/CustomModal";
+import SearchBar from "../../components/common/SearchBar";
+import { setRestaurantsState } from "../../redux/features/appStateSlice";
 
 const RestaurantsPage = () => {
   const RESTAURANTS_ENDPOINT = "http://localhost:5000/stores";
@@ -46,23 +46,26 @@ const RestaurantsPage = () => {
   };
   const handleClose = () => setOpen(false);
 
+  const navigate = useNavigate();
+
   return (
     <div>
       <h1>Restaurants</h1>
-      <ImageList>
-        <ImageListItem key="Subheader" cols={2}>
-          <SearchBar setSearchQuery={setSearchQuery} />
-        </ImageListItem>
-
+      <SearchBar setSearchQuery={setSearchQuery} />
+      <ImageList cols={3}>
         {dataFiltered.length > 0 &&
           dataFiltered[0] &&
           dataFiltered.map(
             (restaurant: any) =>
               restaurant && (
-                <ImageListItem key={restaurant.name}>
+                <ImageListItem
+                  key={restaurant.name}
+                  onClick={() => {
+                    navigate(`/restaurant/${restaurant._id}`);
+                  }}
+                >
                   <img
-                    src={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format`}
-                    srcSet={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    src={`data:image/png;base64, ${restaurant.image.data}`}
                     alt={restaurant.name}
                     loading="lazy"
                   />
