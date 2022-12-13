@@ -119,7 +119,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     return res.status(400).json({ msg: e.message });
   }
 
-  const foodItems = await FoodItem.find();
+  const foodItems = await FoodItem.find({ store: foodItem.store });
 
   res.json(foodItems);
 });
