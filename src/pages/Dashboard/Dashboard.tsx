@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Announcement from "../../components/dashboard/Announcement";
 import Carousel from "react-material-ui-carousel";
-import { Button, CardMedia, Paper, Rating } from "@mui/material";
+import { Button, CardMedia, Paper, Rating, useMediaQuery } from "@mui/material";
 import useRestaurantsListener from "../../hooks/use-restaurants";
 import useFoodItemsListener from "../../hooks/use-food-items";
 import { mainColors } from "../../configs/colorConfigs";
@@ -11,13 +11,6 @@ import useOrdersListener from "../../hooks/use-orders";
 import { useGetStoreQuery } from "../../redux/features/apiSlice";
 
 const styles = {
-  CarouselContainer: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  Carousel: {
-    width: "50%",
-  },
   CarouselItem: {
     padding: "3%",
   },
@@ -33,6 +26,7 @@ const styles = {
 };
 
 const Dashboard = () => {
+  const isMobile = useMediaQuery("(max-width:800px)");
   const navigate = useNavigate();
   const userInfo = useSelector((state: any) => state.appState.userInfo);
 
@@ -68,9 +62,16 @@ const Dashboard = () => {
           }}
         />
       </Button>
-      <div style={styles.CarouselContainer}>
+      <div
+        style={{
+          display: isMobile ? "block" : "flex",
+          justifyContent: "center",
+        }}
+      >
         <Carousel
-          sx={styles.Carousel}
+          sx={{
+            width: isMobile ? "100%" : "50%",
+          }}
           navButtonsAlwaysVisible={false}
           navButtonsAlwaysInvisible={true}
           indicatorIconButtonProps={{
@@ -111,9 +112,16 @@ const Dashboard = () => {
           }}
         />
       </Button>
-      <div style={styles.CarouselContainer}>
+      <div
+        style={{
+          display: isMobile ? "block" : "flex",
+          justifyContent: "center",
+        }}
+      >
         <Carousel
-          sx={styles.Carousel}
+          sx={{
+            width: isMobile ? "100%" : "50%",
+          }}
           navButtonsAlwaysVisible={false}
           navButtonsAlwaysInvisible={true}
           indicatorIconButtonProps={{
