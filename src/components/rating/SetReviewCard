@@ -1,0 +1,47 @@
+import { mainColors } from "../../configs/colorConfigs";
+import StarsIcon from '@mui/icons-material/Stars';
+
+
+
+const ReviewCard = () => {
+  
+  const [value, setValue] = useState<number | null>(2);
+  return (
+
+    <Grid sx={{ margin: "1rem" }}>
+      <Card sx={{ minWidth: "250px", color: mainColors.darkGray }}>
+        <CardHeader title={"Set Rating"}></CardHeader>
+        <CardContent>
+        <Rating 
+          name="simple-controlled" 
+          value={value} 
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        />
+        </CardContent>
+        <CardActions>
+          
+            <Button
+              size='medium'
+              startIcon={<StarsIcon />}
+              sx={{
+                backgroundColor: mainColors.darkGray,
+                color: mainColors.lightOrange,
+                marginY: "1rem",
+                marginX: "0.5rem",
+              }}
+              onClick={() => {
+                
+              }}
+            >
+              Set Rating
+            </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+
+  );
+};
+
+export default SetReviewCard;

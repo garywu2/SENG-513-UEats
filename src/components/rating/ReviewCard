@@ -1,0 +1,57 @@
+import { useEffect, useState } from "react";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import IconButton from "@mui/material/IconButton";
+import InfoIcon from "@mui/icons-material/Info";
+import SearchBar from "../../components/common/SearchBar";
+import CustomModal from "../../components/common/CustomModal";
+import axios from "axios";
+import { setRestaurantsState } from "../../redux/features/appStateSlice";
+import { useDispatch, useSelector } from "react-redux";
+import assets from "../../assets";
+
+import {Rating, Grid, Avatar, Paper, Divider, Card, CardHeader, CardContent, Typography, CardActions, Button, Modal, Box} from '@mui/material/';
+import { mainColors } from "../../configs/colorConfigs";
+import StarsIcon from '@mui/icons-material/Stars';
+
+
+
+const ReviewCard = () => {
+  
+  const [value, setValue] = useState<number | null>(2);
+  return (
+
+    <div >
+      <h3>Reviews</h3>
+      <Paper  sx={{ padding:"1rem", margin: "1rem" }}>
+        <Grid container  >
+          <Grid justifyContent="left" item xs >
+            <h4 >John Doe</h4>
+            <Rating name="read-only" value={4} size="medium" readOnly/>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+              luctus ut est sed faucibus. Duis bibendum ac ex vehicula laoreet.
+              Suspendisse congue vulputate lobortis. Pellentesque at interdum
+              tortor.{" "}
+            </p>
+            <p style={{ textAlign: "left", color: "gray" }}>
+              posted on {"<date placeholder>"}
+            </p>
+            <Divider/>
+            <p><em>Response from owner:</em></p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+              luctus ut est sed faucibus. Duis bibendum ac ex vehicula laoreet.
+              Suspendisse congue vulputate lobortis. Pellentesque at interdum
+              tortor.{" "}
+            </p>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
+
+  );
+};
+
+export default ReviewCard;

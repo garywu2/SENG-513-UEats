@@ -51,21 +51,21 @@ const RestaurantsPage = () => {
   return (
     <div>
       <h1>Restaurants</h1>
-      <SearchBar setSearchQuery={setSearchQuery} />
-      <ImageList cols={3}>
+      <ImageList>
+        <ImageListItem key="Subheader" cols={2}>
+          <SearchBar setSearchQuery={setSearchQuery} />
+        </ImageListItem>
         {dataFiltered.length > 0 &&
           dataFiltered[0] &&
           dataFiltered.map(
             (restaurant: any) =>
               restaurant && (
-                <ImageListItem
-                  key={restaurant.name}
-                  onClick={() => {
-                    navigate(`/restaurant/${restaurant._id}`);
-                  }}
-                >
+                <>    
+                <ImageListItem key={restaurant.name}>
+                  <Rating name="read-only" value={restaurant.rating} size="large" readOnly style={{position: "absolute"}} sx={{ margin: "1.5rem" }}/>
                   <img
-                    src={`data:image/png;base64, ${restaurant.image.data}`}
+                    src={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format`}
+                    srcSet={`https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={restaurant.name}
                     loading="lazy"
                   />
@@ -83,6 +83,7 @@ const RestaurantsPage = () => {
                     }
                   />
                 </ImageListItem>
+                </>
               )
           )}
         {restaurantSelected && (
