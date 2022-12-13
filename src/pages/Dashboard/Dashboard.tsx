@@ -98,7 +98,6 @@ const Dashboard = () => {
           ))}
         </Carousel>
       </div> */}
-
       <h2>Popular Restaurants</h2>
       <Button
         sx={styles.ViewAllButton}
