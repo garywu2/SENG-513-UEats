@@ -16,6 +16,7 @@ import sizeConfigs from "../../configs/sizeConfigs";
 import FirebaseContext from "../../context/firebase";
 import UserContext from "../../context/user";
 import { resetState } from "../../redux/features/appStateSlice";
+import { Link } from "react-router-dom";
 import appRoutes from "../../routes/appRoutes";
 import LogoutButton from "./LogoutButton";
 import SidebarItem from "./SidebarItem";
@@ -89,10 +90,12 @@ const Sidebar = () => {
       >
         <Toolbar sx={{ marginBottom: "20px" }}>
           <Stack sx={{ width: "100%" }} direction="row" justifyContent="center">
+          <Link to = '/dashboard'> 
             <Avatar
               src={assets.images.logo}
               sx={{ width: isMobile ? 70 : 100, height: isMobile ? 70 : 100 }}
             />
+            </Link>
           </Stack>
         </Toolbar>
         {appRoutes.map((route, index) =>
