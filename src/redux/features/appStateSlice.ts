@@ -6,6 +6,7 @@ type appState = {
   orders: any;
   restaurants: any;
   userInfo: any;
+  foodItems: any;
 };
 
 const initialState: appState = {
@@ -14,6 +15,7 @@ const initialState: appState = {
   orders: [],
   restaurants: [],
   userInfo: {},
+  foodItems: {},
 };
 
 export const appStateSlice = createSlice({
@@ -23,7 +25,7 @@ export const appStateSlice = createSlice({
     setAppState: (state, action: PayloadAction<string>) => {
       state.appState = action.payload;
     },
-    setFoodItemsState: (state, action: any) => {
+    setCartFoodItemsState: (state, action: any) => {
       state.cartFoodItems = action.payload;
     },
     setOrdersState: (state, action: any) => {
@@ -35,22 +37,28 @@ export const appStateSlice = createSlice({
     setUserInfoState: (state, action: any) => {
       state.userInfo = action.payload;
     },
+    setFoodItemsState: (state, action: any) => {
+      state.foodItems = action.payload;
+    },
+
     resetState: (state) => {
       state.appState = "";
       state.cartFoodItems = [];
       state.orders = [];
       state.restaurants = [];
       state.userInfo = {};
+      state.foodItems = {};
     },
   },
 });
 
 export const {
   setAppState,
-  setFoodItemsState,
-  setOrdersState,
+  setCartFoodItemsState,
   setRestaurantsState,
   setUserInfoState,
+  setFoodItemsState,
+  setOrdersState,
   resetState,
 } = appStateSlice.actions;
 

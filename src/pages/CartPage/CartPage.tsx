@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartItem from "../../components/shoppingCart/ShoppingCartItem";
 import { mainColors } from "../../configs/colorConfigs";
-import { setFoodItemsState } from "../../redux/features/appStateSlice";
+import { setCartFoodItemsState } from "../../redux/features/appStateSlice";
 
 const CartPage = () => {
   const [foodItems, setFoodItems]: any = useState([]);
@@ -35,7 +35,7 @@ const CartPage = () => {
           .then((result: any) => {
             console.log(result.data);
             if (result.data.length > 0) {
-              dispatch(setFoodItemsState(result.data));
+              dispatch(setCartFoodItemsState(result.data));
             }
           });
       }
@@ -72,7 +72,7 @@ const CartPage = () => {
       })
       .then((result: any) => {
         console.log(result.data);
-        dispatch(setFoodItemsState(result.data));
+        dispatch(setCartFoodItemsState(result.data));
       });
   };
 
@@ -84,7 +84,7 @@ const CartPage = () => {
       })
       .then((result: any) => {
         console.log(result.data);
-        dispatch(setFoodItemsState(result.data));
+        dispatch(setCartFoodItemsState(result.data));
       });
   };
 

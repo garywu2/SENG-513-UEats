@@ -28,7 +28,7 @@ const appRoutes: RouteType[] = [
   },
   {
     path: "/dashboard",
-    element: <Dashboard name='User' />, // TODO grab username from db
+    element: <Dashboard />,
     state: "dashboard",
     sidebarProps: {
       displayText: "Dashboard",

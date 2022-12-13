@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { mainColors } from "../../configs/colorConfigs";
 import {
-  setFoodItemsState,
+  setCartFoodItemsState,
   setOrdersState,
 } from "../../redux/features/appStateSlice";
 
@@ -71,7 +71,7 @@ const PaymentPage = () => {
             })
             .then((result: any) => {
               const emptyArray: any = [];
-              dispatch(setFoodItemsState(emptyArray));
+              dispatch(setCartFoodItemsState(emptyArray));
               dispatch(setOrdersState(emptyArray));
               navigate("/orders");
               setError("");

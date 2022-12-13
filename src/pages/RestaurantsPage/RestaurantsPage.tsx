@@ -3,25 +3,18 @@ import IconButton from "@mui/material/IconButton";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../../components/common/CustomModal";
+import CardMedia from "@mui/material/CardMedia";
+import useRestaurantsListener from "../../hooks/use-restaurants";
 import SearchBar from "../../components/common/SearchBar";
-import { setRestaurantsState } from "../../redux/features/appStateSlice";
 
 const RestaurantsPage = () => {
-  const RESTAURANTS_ENDPOINT = "http://localhost:5000/stores";
-  const dispatch = useDispatch();
-  const restaurants = useSelector((state: any) => state.appState.restaurants);
+  const { restaurants } = useRestaurantsListener();
+  const allStores = restaurants;
 
-  useEffect(() => {
-    axios.get(RESTAURANTS_ENDPOINT).then((result: any) => {
-      console.log(result.data);
-      dispatch(setRestaurantsState(result.data));
-    });
-  }, [dispatch]);
+  console.log("restaurants:" + restaurants);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -35,9 +28,9 @@ const RestaurantsPage = () => {
     }
   };
 
-  const dataFiltered = filterData(restaurants);
+  const dataFiltered = filterData(allStores);
 
-  const [restaurantSelected, setRestaurantSelected] = useState(restaurants[0]);
+  const [restaurantSelected, setRestaurantSelected] = useState(allStores[0]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = (restaurant: any) => () => {
@@ -63,6 +56,7 @@ const RestaurantsPage = () => {
                   onClick={() => {
                     navigate(`/restaurant/${restaurant._id}`);
                   }}
+                  sx={{ cursor: "pointer" }}
                 >
                   <img
                     src={`data:image/png;base64, ${restaurant.image.data}`}
@@ -84,7 +78,7 @@ const RestaurantsPage = () => {
                   />
                 </ImageListItem>
               )
-          )}
+          )}{" "}
         {restaurantSelected && (
           <CustomModal
             title={restaurantSelected.name}
