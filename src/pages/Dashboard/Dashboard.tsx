@@ -48,7 +48,7 @@ const Dashboard = () => {
         title="Get Discount Voucher Up To 20%"
         text="As UEAT's beta user, you may be eligible for a discount voucher! Click the button below to learn more!"
       />
-      <h2>Popular Dishes</h2>
+      {/* <h2>Popular Dishes</h2>
       <Button
         sx={styles.ViewAllButton}
         size="large"
@@ -97,7 +97,7 @@ const Dashboard = () => {
             <FoodItem key={i} item={foodItem} />
           ))}
         </Carousel>
-      </div>
+      </div> */}
 
       <h2>Popular Restaurants</h2>
       <Button
