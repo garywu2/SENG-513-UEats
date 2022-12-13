@@ -5,6 +5,7 @@ const Review = require("../models/Review");
 const FoodItem = require("../models/FoodItem");
 const Order = require("../models/Order");
 const multer = require("multer");
+const User = require("../models/User");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -105,7 +106,12 @@ router.post("/", upload.single("image"), async (req, res) => {
   try {
     const dbStore = new Store(store);
     await dbStore.save();
-    res.json(dbStore);
+
+    const user = await User.findOne({ _id: store.vendor });
+    user.store = dbStore._id;
+    await user.save();
+
+    res.json(user);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

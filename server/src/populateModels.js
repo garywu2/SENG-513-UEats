@@ -263,6 +263,13 @@ const insertData = async () => {
     "steve3",
     USER_TYPE.vendor
   );
+  await saveUser(
+    "NoStoreSteve",
+    "NoStoreSteve@gmail.com",
+    "1234567897",
+    "NoStoreSteve",
+    USER_TYPE.vendor
+  );
 
   const vendorID = await getUserID("Steve");
   const vendorID1 = await getUserID("Steve2");
