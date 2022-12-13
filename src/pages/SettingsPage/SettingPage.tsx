@@ -16,6 +16,8 @@ import Tb from "./TabPanel";
 const SettingPage = () => {
   const { user } = useContext(UserContext);
   const [tabValue, setTabValue] = useState(0);
+  const [userUpdateSucess, setUserUpdateSucess] = useState("");
+  const [restUpdateSucess, setresUpdateSucess] = useState("");
   let userInfo = useSelector((state: any) => state.appState.userInfo);
   let settingFields = {
     name: userInfo.name,
@@ -81,6 +83,7 @@ const SettingPage = () => {
       }).then((servResult: any) => {
         console.log(servResult);
         setError("");
+        setUserUpdateSucess("User Sucessfully Updated!");
         dispatch(setUserInfoState(servResult.data));
       })
       .catch((e: any) => {
@@ -119,6 +122,7 @@ const SettingPage = () => {
       }).then((servResult: any) => {
         console.log(servResult);
         setError("");
+        setresUpdateSucess("Restaurant Information Sucessfully Updated!");
       })
       .catch((e: any) => {
         setError(e.message);
@@ -196,6 +200,7 @@ const SettingPage = () => {
             onChange={handleChange}
           />
         {error && <Typography color='red'>{error}</Typography>}
+        {userUpdateSucess && <Typography color='green'>{userUpdateSucess}</Typography>}
         <Button
           size='large'
           sx={{
@@ -294,6 +299,7 @@ const SettingPage = () => {
             onChange={handleChange}
           />
         {error && <Typography color='red'>{error}</Typography>}
+        {userUpdateSucess && <Typography color='green'>{userUpdateSucess}</Typography>}
         <Button
           size='large'
           fullWidth
@@ -354,6 +360,7 @@ const SettingPage = () => {
             onChange={handleFileChange}
           ></TextField>
         {error && <Typography color='red'>{error}</Typography>}
+        {restUpdateSucess && <Typography color='green'>{restUpdateSucess}</Typography>}
         <Button
           size='large'
           fullWidth
