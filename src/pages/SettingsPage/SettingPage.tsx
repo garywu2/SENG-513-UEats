@@ -50,7 +50,7 @@ const SettingPage = () => {
   };
 
   useEffect(() => {
-    if(userInfo._id && userInfo.type === "vendor") {
+    if(userInfo._id && userInfo.type === "vendor" && userInfo.store) {
       axios.get(`http://localhost:5000/stores/${userInfo.store}`).then((result: any) => {
         setupdateStateRes(result.data);
       }).catch((e: any) => {
@@ -125,7 +125,7 @@ const SettingPage = () => {
     <div>
     <h1 style={{display:'flex', textAlign:'center', justifyContent:'center'}}>Current Account Information</h1>
     <p style={{display:'flex', textAlign:'center', justifyContent:'center'}}>Click Update Button to update values to values currently set</p>
-    {userInfo.type !== "vendor" ? (
+    {userInfo.type !== "vendor" || !userInfo.store ? (
         <Box
         component='form'
         display={"flex"}
