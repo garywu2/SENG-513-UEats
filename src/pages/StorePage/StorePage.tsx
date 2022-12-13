@@ -92,42 +92,46 @@ const StorePage = () => {
     <>
       <Box sx={{ flexGrow: 1 }}>
         {userInfo.store ? (
-          <div>
-            {storeFoodItems.length > 0 ? (
-              <Grid container spacing={2}>
-                {storeFoodItems.map((item: any) => {
-                  return (
-                    <StorePageItem
-                      {...item}
-                      handleEdit={handleEdit}
-                      handleDelete={handleDelete}
-                      key={item._id}
-                    />
-                  );
-                })}
-              </Grid>
-            ) : (
-              <h3>No food items available</h3>
-            )}
-            <Button
-              startIcon={<AddIcon />}
-              sx={{
-                backgroundColor: mainColors.darkGray,
-                color: mainColors.lightOrange,
-                marginTop: "2rem",
-                paddingY: "0.5rem",
-                paddingX: "1rem",
-              }}
-              onClick={() => [setOpenModal(true)]}
-            >
-              Add Food Item
-            </Button>
-            <StoreAddFoodItem
-              openModal={opeModal}
-              handleClose={handleClose}
-              handleCreate={handleCreate}
-            />
-          </div>
+          userInfo.approvalStatus ? (
+            <div>
+              {storeFoodItems.length > 0 ? (
+                <Grid container spacing={2}>
+                  {storeFoodItems.map((item: any) => {
+                    return (
+                      <StorePageItem
+                        {...item}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
+                        key={item._id}
+                      />
+                    );
+                  })}
+                </Grid>
+              ) : (
+                <h3>No food items available</h3>
+              )}
+              <Button
+                startIcon={<AddIcon />}
+                sx={{
+                  backgroundColor: mainColors.darkGray,
+                  color: mainColors.lightOrange,
+                  marginTop: "2rem",
+                  paddingY: "0.5rem",
+                  paddingX: "1rem",
+                }}
+                onClick={() => [setOpenModal(true)]}
+              >
+                Add Food Item
+              </Button>
+              <StoreAddFoodItem
+                openModal={opeModal}
+                handleClose={handleClose}
+                handleCreate={handleCreate}
+              />
+            </div>
+          ) : (
+            "Waiting for Admin to approve your store creation request..."
+          )
         ) : (
           <CreateStoreForm />
         )}
