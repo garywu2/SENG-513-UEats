@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { mainColors } from "../../configs/colorConfigs";
-import { setFoodItemsState } from "../../redux/features/appStateSlice";
+import { setCartFoodItemsState } from "../../redux/features/appStateSlice";
 
 const RestaurantDetailPage = (props: any) => {
   const [foodItems, setFoodItems] = useState([]);
@@ -79,7 +79,7 @@ const RestaurantDetailPage = (props: any) => {
                             .then((result: any) => {
                               console.log(result);
                               if (result.data) {
-                                dispatch(setFoodItemsState(result.data));
+                                dispatch(setCartFoodItemsState(result.data));
                               }
                             })
                             .catch((e: any) => {
