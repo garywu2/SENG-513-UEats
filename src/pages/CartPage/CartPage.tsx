@@ -89,7 +89,7 @@ const CartPage = () => {
   };
 
   return (
-    <Box display='flex' flexDirection='column'>
+    <Box display="flex" flexDirection="column">
       {foodItems.map((item: any) => (
         <ShoppingCartItem
           cartItem={item.foodItem}
@@ -100,15 +100,15 @@ const CartPage = () => {
         />
       ))}
       <Box
-        display='flex'
-        flexDirection='row'
+        display="flex"
+        flexDirection="row"
         sx={{ marginY: "1rem" }}
-        justifyContent='center'
+        justifyContent="center"
       >
         <Typography
-          display='flex'
+          display="flex"
           alignItems={"center"}
-          variant='h5'
+          variant="h5"
           sx={{
             bgcolor: "background.paper",
             boxShadow: 1,
@@ -121,7 +121,7 @@ const CartPage = () => {
         </Typography>
 
         <Button
-          size='large'
+          size="large"
           sx={{
             backgroundColor: mainColors.darkGray,
             color: mainColors.lightOrange,

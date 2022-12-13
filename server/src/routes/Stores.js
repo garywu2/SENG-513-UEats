@@ -68,7 +68,9 @@ router.get("/:_id/reviews", async (req, res) => {
     return res.status(400).json({ msg: "Store id is missing" });
   }
   try {
-    const reviews = await Review.find({ store: id });
+    const reviews = await Review.find({ store: id })
+      .populate("client")
+      .populate("store");
     res.json(reviews);
   } catch (e) {
     return res.status(400).json({ msg: e.message });

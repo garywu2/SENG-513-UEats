@@ -145,7 +145,10 @@ router.post("/", async (req, res) => {
       }
       await store.save();
     }
-    res.json(review);
+    const reviews = await Review.find({ store: review.store })
+      .populate("client")
+      .populate("store");
+    res.json(reviews);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
