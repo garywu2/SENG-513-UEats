@@ -6,6 +6,7 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
+  Button,
   Collapse,
   IconButton,
   IconButtonProps,
@@ -18,6 +19,11 @@ import {
   useGetOrderFoodItemsQuery,
   useGetStoreQuery,
 } from "../../redux/features/apiSlice";
+import CheckIcon from "@mui/icons-material/Check";
+import colorConfigs from "../../configs/colorConfigs";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrdersState } from "../../redux/features/appStateSlice";
+import axios from "axios";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -34,12 +40,27 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const OrderCard = (props: any) => {
+  const userInfo = useSelector((state: any) => state.appState.userInfo);
+  const storeOrders = useSelector((state: any) => state.appState.orders);
+  const dispatch = useDispatch();
   const { data: storeData } = useGetStoreQuery(props.order.store);
   const { data: foodItemsData } = useGetOrderFoodItemsQuery(props.order._id);
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleProcessClick = (orderId: any) => {
+    axios
+      .put(`http://localhost:5000/orders/process/`, { _id: orderId })
+      .then((result: any) => {
+        const newOrders = storeOrders.map((o: any) =>
+          o._id === orderId ? result.data : o
+        );
+        dispatch(setOrdersState(newOrders));
+        props.setOrders(newOrders);
+      });
   };
 
   return (
@@ -76,8 +97,11 @@ const OrderCard = (props: any) => {
               Price: ${props.order.totalCost}
             </Typography>
           </CardContent>
-          <CardActions disableSpacing sx={{ paddingBottom: 0 }}>
-            <Typography marginLeft="0.5rem" component="div">
+          <CardActions
+            disableSpacing
+            sx={{ paddingBottom: 0, marginBottom: "1em" }}
+          >
+            <Typography variant="body2" marginLeft="0.5rem" component="div">
               Food Items
             </Typography>
             <ExpandMore
@@ -88,6 +112,26 @@ const OrderCard = (props: any) => {
             >
               <ExpandMoreIcon />
             </ExpandMore>
+            {userInfo.type === "vendor" && props.order.status === "active" && (
+              <Button
+                onClick={() => {
+                  handleProcessClick(props.order._id);
+                }}
+                size="small"
+                startIcon={<CheckIcon />}
+                variant="contained"
+                sx={{
+                  "&: hover": {
+                    backgroundColor: colorConfigs.sidebar.activeBg,
+                  },
+                  backgroundColor: colorConfigs.sidebar.hoverBg,
+                  color: colorConfigs.sidebar.color,
+                  marginLeft: "0.2em",
+                }}
+              >
+                Process
+              </Button>
+            )}
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent sx={{ padding: "0px" }}>
