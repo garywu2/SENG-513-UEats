@@ -1,6 +1,7 @@
 // TODO display Sidebar only if user is logged in
 import PersonIcon from "@mui/icons-material/Person";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { LockReset } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -47,6 +48,10 @@ const HomePage = () => {
   const handleSignUp = () => {
     navigate("/signup");
   };
+
+  const handlePasswordReset = () => {
+    navigate("/passwordreset");
+  }
 
   return (
     <div>
@@ -114,6 +119,18 @@ const HomePage = () => {
               }}
             >
               Register
+            </Button>
+            <Button
+              onClick={handlePasswordReset}
+              size='large'
+              startIcon={<LockReset />}
+              sx={{
+                backgroundColor: mainColors.darkGray,
+                color: mainColors.lightOrange,
+                marginY: "1rem",
+              }}
+            >
+              Forgot Password
             </Button>
           </Box>
         </div>
