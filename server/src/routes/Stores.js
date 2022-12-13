@@ -9,11 +9,14 @@ const User = require("../models/User");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//get all stores
+//get all stores from approved vendors
 router.get("/", async (req, res) => {
   try {
-    const stores = await Store.find();
-    res.json(stores);
+    const stores = await Store.find().populate("vendor");
+    const approved_stores = stores.filter(
+      (store) => store.vendor.approvalStatus
+    );
+    res.json(approved_stores);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
