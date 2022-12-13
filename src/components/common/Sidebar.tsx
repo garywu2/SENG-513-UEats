@@ -49,7 +49,11 @@ const Sidebar = () => {
         return false;
       }
     } else if (userInfo.type && userInfo.type === "admin") {
-      if (lcText === "shopping cart" || lcText === "orders") {
+      if (
+        lcText === "shopping cart" ||
+        lcText === "orders" ||
+        lcText === "store"
+      ) {
         return false;
       }
     }
