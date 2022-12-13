@@ -64,6 +64,7 @@ const StorePage = () => {
         },
       })
       .then((result: any) => {
+        console.log(result.data);
         setStoreFoodItems(result.data);
         setError("");
       })
@@ -89,54 +90,49 @@ const StorePage = () => {
 
   return (
     <>
-      <h1>Store Page</h1>
-      {userInfo.store ? (
-        <Box sx={{ flexGrow: 1 }}>
-          {userInfo.store ? (
-            <div>
-              {storeFoodItems.length > 0 ? (
-                <Grid container spacing={2}>
-                  {storeFoodItems.map((item: any) => {
-                    return (
-                      <StorePageItem
-                        {...item}
-                        handleEdit={handleEdit}
-                        handleDelete={handleDelete}
-                        key={item._id}
-                      />
-                    );
-                  })}
-                </Grid>
-              ) : (
-                <h3>No food items available</h3>
-              )}
-              <Button
-                startIcon={<AddIcon />}
-                sx={{
-                  backgroundColor: mainColors.darkGray,
-                  color: mainColors.lightOrange,
-                  marginTop: "2rem",
-                  paddingY: "0.5rem",
-                  paddingX: "1rem",
-                }}
-                onClick={() => [setOpenModal(true)]}
-              >
-                Add Food Item
-              </Button>
-              <StoreAddFoodItem
-                openModal={opeModal}
-                handleClose={handleClose}
-                handleCreate={handleCreate}
-              />
-            </div>
-          ) : (
-            <h3>Please add store</h3>
-          )}
-          <Typography color="red">{error}</Typography>
-        </Box>
-      ) : (
-        <CreateStoreForm />
-      )}
+      <Box sx={{ flexGrow: 1 }}>
+        {userInfo.store ? (
+          <div>
+            {storeFoodItems.length > 0 ? (
+              <Grid container spacing={2}>
+                {storeFoodItems.map((item: any) => {
+                  return (
+                    <StorePageItem
+                      {...item}
+                      handleEdit={handleEdit}
+                      handleDelete={handleDelete}
+                      key={item._id}
+                    />
+                  );
+                })}
+              </Grid>
+            ) : (
+              <h3>No food items available</h3>
+            )}
+            <Button
+              startIcon={<AddIcon />}
+              sx={{
+                backgroundColor: mainColors.darkGray,
+                color: mainColors.lightOrange,
+                marginTop: "2rem",
+                paddingY: "0.5rem",
+                paddingX: "1rem",
+              }}
+              onClick={() => [setOpenModal(true)]}
+            >
+              Add Food Item
+            </Button>
+            <StoreAddFoodItem
+              openModal={opeModal}
+              handleClose={handleClose}
+              handleCreate={handleCreate}
+            />
+          </div>
+        ) : (
+          <CreateStoreForm />
+        )}
+        <Typography color="red">{error}</Typography>
+      </Box>
     </>
   );
 };
