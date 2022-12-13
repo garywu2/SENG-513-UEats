@@ -39,7 +39,7 @@ const PageWrapper = (props: Props) => {
 
   return (
     <>
-      {!!user || props.state === "home" || props.state === "signup" ? (
+      {!!user || props.state === "home" || props.state === "signup" || props.state === "passwordreset" ? (
         props.children
       ) : (
         <Navigate to="/" />
