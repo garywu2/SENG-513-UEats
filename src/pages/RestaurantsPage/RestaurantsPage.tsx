@@ -12,7 +12,7 @@ import SearchBar from "../../components/common/SearchBar";
 
 const RestaurantsPage = () => {
   const { restaurants } = useRestaurantsListener();
-  const allStores = restaurants.slice(0, restaurants.length / 2);
+  const allStores = restaurants;
 
   console.log("restaurants:" + restaurants);
 
