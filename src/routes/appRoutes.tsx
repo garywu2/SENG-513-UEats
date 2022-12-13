@@ -15,6 +15,7 @@ import RestaurantsPage from "../pages/RestaurantsPage/RestaurantsPage";
 import SettingPage from "../pages/SettingsPage/SettingPage";
 import SignupPage from "../pages/Signup/SignupPage";
 import StorePage from "../pages/StorePage/StorePage";
+import PasswordResetPage from "../pages/PasswordResetPage/PasswordResetPage";
 import { RouteType } from "./config";
 
 // TODO include/exclude certain options based on the user type (admin shouldn't see Orders and Shopping Cart in the Sidebar)
@@ -98,6 +99,11 @@ const appRoutes: RouteType[] = [
     element: <SignupPage />,
     state: "signup",
   },
+  {
+    path: "/passwordreset",
+    element: <PasswordResetPage />,
+    state: "passwordreset"
+  }
 ];
 
 export default appRoutes;
