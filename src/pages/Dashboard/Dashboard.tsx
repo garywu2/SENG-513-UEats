@@ -137,7 +137,7 @@ const Dashboard = () => {
           }}
           indicatorContainerProps={{
             style: {
-              marginTop: "50px", // 5
+              marginTop: "70px", // 5
             },
           }}
         >
