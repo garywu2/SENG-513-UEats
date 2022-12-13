@@ -31,14 +31,15 @@ const Dashboard = () => {
   const userInfo = useSelector((state: any) => state.appState.userInfo);
 
   const { restaurants } = useRestaurantsListener();
-  const popularRestaurants = restaurants.slice(0, 3);
+  const popularRestaurants = restaurants;
 
   const { orders } = useOrdersListener();
   const processedOrders = orders.filter(
     (order: any) => order.status === "processed"
   );
 
-  const { foodItems } = useFoodItemsListener(); // TODO having issues with this
+  const { foodItems } = useFoodItemsListener();
+  const allFoodItems = foodItems;
 
   return (
     <div>
@@ -47,6 +48,57 @@ const Dashboard = () => {
         title="Get Discount Voucher Up To 20%"
         text="As UEAT's beta user, you may be eligible for a discount voucher! Click the button below to learn more!"
       />
+      <h2>Popular Dishes</h2>
+      <Button
+        sx={styles.ViewAllButton}
+        size="large"
+        onClick={(e) => navigate("/cart")}
+      >
+        Order From Cart
+        <ArrowCircleRightIcon
+          sx={{
+            paddingLeft: "3%",
+            fontSize: "1.8rem",
+            color: mainColors.lightOrange,
+          }}
+        />
+      </Button>
+
+      <div
+        style={{
+          display: isMobile ? "block" : "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Carousel
+          sx={{
+            width: isMobile ? "100%" : "50%",
+          }}
+          navButtonsAlwaysVisible={false}
+          navButtonsAlwaysInvisible={true}
+          indicatorIconButtonProps={{
+            style: {
+              padding: "10px", // 1
+              color: mainColors.darkGray, // 3
+            },
+          }}
+          activeIndicatorIconButtonProps={{
+            style: {
+              backgroundColor: mainColors.lightOrange, // 2
+            },
+          }}
+          indicatorContainerProps={{
+            style: {
+              marginTop: "5%",
+            },
+          }}
+        >
+          {allFoodItems.map((foodItem: any, i: number) => (
+            <FoodItem key={i} item={foodItem} />
+          ))}
+        </Carousel>
+      </div>
+
       <h2>Popular Restaurants</h2>
       <Button
         sx={styles.ViewAllButton}
@@ -87,7 +139,7 @@ const Dashboard = () => {
           }}
           indicatorContainerProps={{
             style: {
-              marginTop: "50px", // 5
+              marginTop: "5%",
             },
           }}
         >
@@ -137,7 +189,7 @@ const Dashboard = () => {
           }}
           indicatorContainerProps={{
             style: {
-              marginTop: "70px", // 5
+              marginTop: "5%",
             },
           }}
         >
@@ -149,6 +201,22 @@ const Dashboard = () => {
     </div>
   );
 };
+
+function FoodItem(props: any) {
+  return (
+    <Paper style={styles.CarouselItem}>
+      <CardMedia
+        component="img"
+        width="200px"
+        height="200px"
+        image={`data:image/png;base64, ${props.item.image.data}`}
+        alt={props.item.name}
+      />
+      <h2>{props.item.name}</h2>
+      <p>{props.item.description}</p>
+    </Paper>
+  );
+}
 
 function RestaurantItem(props: any) {
   return (
@@ -172,7 +240,17 @@ function OrderItem(props: any) {
   return (
     <Paper style={styles.CarouselItem}>
       {storeData && <h2>{storeData.name}</h2>}
-      <p>{props.item.pickupTime}</p>
+      <p>
+        {" "}
+        Pick-up:{" "}
+        {new Date(props.item.pickupTime).toLocaleString("en-GB", {
+          minute: "numeric",
+          hour: "numeric",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </p>
     </Paper>
   );
 }
