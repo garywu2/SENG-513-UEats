@@ -88,7 +88,9 @@ const addFoodItemsToStore = async (storeID, foodItems) => {
   console.log(`food items added to store`);
 };
 
-const addOrdersToStore = async (storeID, processedOrders, activeOrders) => {
+const addOrdersToStore = async (storeID) => {
+  const processedOrders = await getProcessedOrders(storeID);
+  const activeOrders = await getActiveOrders(storeID);
   const store = await Store.findOne({ _id: storeID });
   store.activeOrders = activeOrders;
   store.processedOrders = processedOrders;
@@ -162,13 +164,19 @@ const saveOrder = async (
   console.log(`Order saved`);
 };
 
-const getActiveOrders = async () => {
-  const result = await Order.find({ status: ORDER_STATUS.active });
+const getActiveOrders = async (storeId) => {
+  const result = await Order.find({
+    store: storeId,
+    status: ORDER_STATUS.active,
+  });
   return result;
 };
 
-const getProcessedOrders = async () => {
-  const result = await Order.find({ status: ORDER_STATUS.processed });
+const getProcessedOrders = async (storeId) => {
+  const result = await Order.find({
+    store: storeId,
+    status: ORDER_STATUS.processed,
+  });
   return result;
 };
 
@@ -257,8 +265,8 @@ const insertData = async () => {
   );
 
   const vendorID = await getUserID("Steve");
-  const vendorID2 = await getUserID("Steve2");
-  const vendorID3 = await getUserID("Steve3");
+  const vendorID1 = await getUserID("Steve2");
+  const vendorID2 = await getUserID("Steve3");
   const clientID = await getUserID("John");
   const clientIDuEats = await getUserID("Ueats");
   const clientID2 = await getUserID("Smith");
@@ -280,7 +288,7 @@ const insertData = async () => {
     "Bake Chef",
     "We sell subs!",
     "1234567896",
-    vendorID2,
+    vendorID1,
     "U of C",
     {
       data: fs.readFileSync(
@@ -293,7 +301,7 @@ const insertData = async () => {
     "CPU Express",
     "We sell the finest Canadian pizza",
     "1234567897",
-    vendorID3,
+    vendorID2,
     "U of C",
     {
       data: fs.readFileSync(
@@ -378,18 +386,19 @@ const insertData = async () => {
     10,
     ORDER_STATUS.processed
   );
-  
-  await saveShoppingCart(clientIDuEats, foodItems)
-  await saveShoppingCart(clientID, foodItems);
 
-  const processedOrders = await getProcessedOrders();
-  const activeOrders = await getActiveOrders();
+  await saveShoppingCart(clientIDuEats, foodItems);
+  await saveShoppingCart(clientID, foodItems);
 
   addShoppingCartToUser(clientID);
   addShoppingCartToUser(clientIDuEats);
   addStoreToUser(vendorID, storeID);
+  addStoreToUser(vendorID1, storeID1);
+  addStoreToUser(vendorID2, storeID2);
 
-  await addOrdersToStore(storeID, processedOrders, activeOrders);
+  await addOrdersToStore(storeID);
+  await addOrdersToStore(storeID1);
+  await addOrdersToStore(storeID2);
   await addFoodItemsToStore(storeID, foodItems);
 
   await saveReview(

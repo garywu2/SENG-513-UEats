@@ -11,7 +11,7 @@ const OrderPage = () => {
   const userInfo = useSelector((state: any) => state.appState.userInfo);
   // const { data: ordersData } = useGetOrdersQuery(userInfo._id);
   const [orders, setOrders]: any = useState([]);
-  const storeOrders = useSelector((state: any) => state.appState.foodItems);
+  const storeOrders = useSelector((state: any) => state.appState.orders);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,15 +19,24 @@ const OrderPage = () => {
       setOrders(orders);
     } else {
       if (userInfo && userInfo._id) {
-        axios
-          .get(`http://localhost:5000/orders/user/${userInfo._id}`)
-          .then((result: any) => {
-            dispatch(setOrdersState(result.data));
-            setOrders(result.data);
-          });
+        if (userInfo.type && userInfo.type === "vendor") {
+          axios
+            .get(`http://localhost:5000/stores/${userInfo.store}/orders`)
+            .then((result: any) => {
+              dispatch(setOrdersState(result.data));
+              setOrders(result.data);
+            });
+        } else {
+          axios
+            .get(`http://localhost:5000/orders/user/${userInfo._id}`)
+            .then((result: any) => {
+              dispatch(setOrdersState(result.data));
+              setOrders(result.data);
+            });
+        }
       }
     }
-  }, [dispatch, storeOrders, userInfo]);
+  }, [dispatch, userInfo]);
 
   return (
     <>
@@ -44,8 +53,8 @@ const OrderPage = () => {
           orders
             .filter((order: any) => order.status === "active")
             .map((order: any, index: number) => (
-              <Grid xs={12} sm={4} md={4} lg={3} xl={2} key={index}>
-                <OrderCard order={order} />
+              <Grid xs={12} sm={5} md={5} lg={4} xl={3} key={index}>
+                <OrderCard order={order} setOrders={setOrders} />
               </Grid>
             ))}
       </Grid>
@@ -61,7 +70,7 @@ const OrderPage = () => {
           orders
             .filter((order: any) => order.status === "processed")
             .map((order: any, index: number) => (
-              <Grid xs={12} sm={4} md={4} lg={3} xl={2} key={index}>
+              <Grid xs={12} sm={5} md={5} lg={4} xl={3} key={index}>
                 <OrderCard order={order} />
               </Grid>
             ))}

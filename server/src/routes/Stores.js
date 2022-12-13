@@ -31,31 +31,16 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
-//get active orders for store
-router.get("/:_id/orders/active", async (req, res) => {
+//get orders for store
+router.get("/:_id/orders", async (req, res) => {
   if (!req.params._id) {
     return res.status(400).json({ msg: "Store id is missing" });
   }
   try {
-    const store = await Store.findOne({ _id: req.params._id }).populate(
-      "activeOrders"
-    );
-    res.json(store.activeOrders);
-  } catch (e) {
-    return res.status(400).json({ msg: e.message });
-  }
-});
-
-//get processed orders for store
-router.get("/:_id/orders/processed", async (req, res) => {
-  if (!req.params._id) {
-    return res.status(400).json({ msg: "Store id is missing" });
-  }
-  try {
-    const store = await Store.findOne({ _id: req.params._id }).populate(
-      "processedOrders"
-    );
-    res.json(store.processedOrders);
+    const store = await Store.findOne({ _id: req.params._id })
+      .populate("activeOrders")
+      .populate("processedOrders");
+    res.json(store.activeOrders.concat(store.processedOrders));
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
