@@ -197,6 +197,8 @@ const RestaurantDetailPage = (props: any) => {
                   .then((result: any) => {
                     console.log(result);
                     sortreviewsData(result.data);
+                    setUserReview("");
+                    setUserRating(5);
                   })
                   .catch((e: any) => {
                     console.log(e);
