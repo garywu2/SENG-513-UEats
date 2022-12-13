@@ -7,7 +7,7 @@ const ManageUsersPage = (props: any) => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users")
+      .get("http://localhost:5000/users/unapproved")
       .then((result: any) => {
         if (result.data) {
           setUsers(result.data);

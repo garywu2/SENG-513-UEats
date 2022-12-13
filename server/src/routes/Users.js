@@ -21,7 +21,10 @@ router.get("/", async (req, res) => {
 //get all unapproved users
 router.get("/unapproved", async (req, res) => {
   try {
-    const users = await User.find({ approvalStatus: false });
+    const users = await User.find({
+      approvalStatus: false,
+      type: USER_TYPE.vendor,
+    });
     res.json(users);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
