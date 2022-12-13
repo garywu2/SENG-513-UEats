@@ -1,10 +1,10 @@
 // import { useGetOrdersQuery } from "../../redux/features/apiSlice";
-import Grid from "@mui/material/Unstable_Grid2";
 import { Chip, Divider } from "@mui/material";
-import OrderCard from "../../components/order/OrderCard";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import Grid from "@mui/material/Unstable_Grid2";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import OrderCard from "../../components/order/OrderCard";
 import { setOrdersState } from "../../redux/features/appStateSlice";
 
 const OrderPage = () => {
@@ -15,21 +15,25 @@ const OrderPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userInfo && userInfo._id) {
-      if (userInfo.type && userInfo.type === "vendor") {
-        axios
-          .get(`http://localhost:5000/stores/${userInfo.store}/orders`)
-          .then((result: any) => {
-            dispatch(setOrdersState(result.data));
-            setOrders(result.data);
-          });
-      } else {
-        axios
-          .get(`http://localhost:5000/orders/user/${userInfo._id}`)
-          .then((result: any) => {
-            dispatch(setOrdersState(result.data));
-            setOrders(result.data);
-          });
+    if (storeOrders && storeOrders.length > 0) {
+      setOrders(storeOrders);
+    } else {
+      if (userInfo && userInfo._id) {
+        if (userInfo.type && userInfo.type === "vendor") {
+          axios
+            .get(`http://localhost:5000/stores/${userInfo.store}/orders`)
+            .then((result: any) => {
+              dispatch(setOrdersState(result.data));
+              setOrders(result.data);
+            });
+        } else {
+          axios
+            .get(`http://localhost:5000/orders/user/${userInfo._id}`)
+            .then((result: any) => {
+              dispatch(setOrdersState(result.data));
+              setOrders(result.data);
+            });
+        }
       }
     }
   }, [dispatch, userInfo]);
