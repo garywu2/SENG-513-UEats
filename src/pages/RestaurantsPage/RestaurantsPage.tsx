@@ -44,42 +44,41 @@ const RestaurantsPage = () => {
   return (
     <div>
       <h1>Restaurants</h1>
-      <ImageList>
-        <ImageListItem key="Subheader" cols={2}>
-          <SearchBar setSearchQuery={setSearchQuery} />
-        </ImageListItem>
-
-        {dataFiltered.map(
-          (restaurant: any) =>
-            restaurant && (
-              <ImageListItem key={restaurant.name}>
-                <CardMedia
-                  component="img"
-                  width="200px"
-                  height="200px"
-                  image={`data:image/png;base64, ${restaurant.image.data}`}
-                  alt={restaurant.name}
+      <SearchBar setSearchQuery={setSearchQuery} />
+      <ImageList cols={3}>
+        {dataFiltered.length > 0 &&
+          dataFiltered[0] &&
+          dataFiltered.map(
+            (restaurant: any) =>
+              restaurant && (
+                <ImageListItem
+                  key={restaurant.name}
                   onClick={() => {
                     navigate(`/restaurant/${restaurant._id}`);
                   }}
                   sx={{ cursor: "pointer" }}
-                />
-                <ImageListItemBar
-                  title={restaurant.name}
-                  actionIcon={
-                    <IconButton
-                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                      aria-label={`info about ${restaurant.name}`}
-                      onClick={handleOpen(restaurant)}
-                    >
-                      <InfoIcon />
-                    </IconButton>
-                  }
-                />
-              </ImageListItem>
-            )
-        )}
-
+                >
+                  <img
+                    src={`data:image/png;base64, ${restaurant.image.data}`}
+                    alt={restaurant.name}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    title={restaurant.name}
+                    subtitle={restaurant.author}
+                    actionIcon={
+                      <IconButton
+                        sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                        aria-label={`info about ${restaurant.name}`}
+                        onClick={handleOpen(restaurant)}
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    }
+                  />
+                </ImageListItem>
+              )
+          )}{" "}
         {restaurantSelected && (
           <CustomModal
             title={restaurantSelected.name}
