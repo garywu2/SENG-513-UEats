@@ -147,56 +147,59 @@ const Dashboard = () => {
           ))}
         </Carousel>
       </div>
-
-      <h2>Past Orders</h2>
-      <Button
-        sx={styles.ViewAllButton}
-        size="large"
-        onClick={(e) => navigate("/orders")}
-      >
-        View All Orders
-        <ArrowCircleRightIcon
-          sx={{
-            paddingLeft: "3%",
-            fontSize: "1.8rem",
-            color: mainColors.lightOrange,
-          }}
-        />
-      </Button>
-      <div
-        style={{
-          display: isMobile ? "block" : "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Carousel
-          sx={{
-            width: isMobile ? "100%" : "50%",
-          }}
-          navButtonsAlwaysVisible={false}
-          navButtonsAlwaysInvisible={true}
-          indicatorIconButtonProps={{
-            style: {
-              padding: "10px", // 1
-              color: mainColors.darkGray, // 3
-            },
-          }}
-          activeIndicatorIconButtonProps={{
-            style: {
-              backgroundColor: mainColors.lightOrange, // 2
-            },
-          }}
-          indicatorContainerProps={{
-            style: {
-              marginTop: "5%",
-            },
-          }}
-        >
-          {processedOrders.map((order: any, i: number) => (
-            <OrderItem key={i} item={order} />
-          ))}
-        </Carousel>
-      </div>
+      {userInfo.type && userInfo.type === "client" && (
+        <>
+          <h2>Past Orders</h2>
+          <Button
+            sx={styles.ViewAllButton}
+            size="large"
+            onClick={(e) => navigate("/orders")}
+          >
+            View All Orders
+            <ArrowCircleRightIcon
+              sx={{
+                paddingLeft: "3%",
+                fontSize: "1.8rem",
+                color: mainColors.lightOrange,
+              }}
+            />
+          </Button>
+          <div
+            style={{
+              display: isMobile ? "block" : "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Carousel
+              sx={{
+                width: isMobile ? "100%" : "50%",
+              }}
+              navButtonsAlwaysVisible={false}
+              navButtonsAlwaysInvisible={true}
+              indicatorIconButtonProps={{
+                style: {
+                  padding: "10px", // 1
+                  color: mainColors.darkGray, // 3
+                },
+              }}
+              activeIndicatorIconButtonProps={{
+                style: {
+                  backgroundColor: mainColors.lightOrange, // 2
+                },
+              }}
+              indicatorContainerProps={{
+                style: {
+                  marginTop: "5%",
+                },
+              }}
+            >
+              {processedOrders.map((order: any, i: number) => (
+                <OrderItem key={i} item={order} />
+              ))}
+            </Carousel>
+          </div>
+        </>
+      )}
     </div>
   );
 };
