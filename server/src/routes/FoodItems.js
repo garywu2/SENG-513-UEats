@@ -77,7 +77,8 @@ router.put("/", upload.single("image"), async (req, res) => {
     };
   }
   await foodItem.save();
-  res.json(foodItem);
+  const foodItems = await FoodItem.find();
+  res.json(foodItems);
 });
 
 //POST request
@@ -169,7 +170,8 @@ router.delete("/", async (req, res) => {
       await cart.save();
     }
 
-    res.json({ msg: "Food item deleted successfully" });
+    const foodItems = await FoodItem.find();
+    res.json(foodItems);
   } catch (e) {
     console.log(e);
     return res.status(400).json({ msg: e.message });
