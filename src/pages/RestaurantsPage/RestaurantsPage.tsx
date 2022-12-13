@@ -11,6 +11,11 @@ import CustomModal from "../../components/common/CustomModal";
 import SearchBar from "../../components/common/SearchBar";
 import { setRestaurantsState } from "../../redux/features/appStateSlice";
 
+import {Rating, Grid, Avatar, Paper, Divider, Card, CardHeader, CardContent, Typography, CardActions, Button, Modal, Box} from '@mui/material/';
+import { mainColors } from "../../configs/colorConfigs";
+import StarsIcon from '@mui/icons-material/Stars';
+
+
 const RestaurantsPage = () => {
   const RESTAURANTS_ENDPOINT = "http://localhost:5000/stores";
   const dispatch = useDispatch();
