@@ -219,8 +219,15 @@ function FoodItem(props: any) {
 }
 
 function RestaurantItem(props: any) {
+  const navigate = useNavigate();
   return (
-    <Paper style={styles.CarouselItem}>
+    <Paper
+      style={styles.CarouselItem}
+      onClick={() => {
+        navigate(`/restaurant/${props.item._id}`);
+      }}
+      sx={{ cursor: "pointer" }}
+    >
       <CardMedia
         component="img"
         width="200px"
