@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartItem from "../../components/shoppingCart/ShoppingCartItem";
 import { mainColors } from "../../configs/colorConfigs";
-import { setFoodItemsState } from "../../redux/features/appStateSlice";
+import { setCartFoodItemsState } from "../../redux/features/appStateSlice";
 
 const CartPage = () => {
   const [foodItems, setFoodItems]: any = useState([]);
@@ -35,7 +35,7 @@ const CartPage = () => {
           .then((result: any) => {
             console.log(result.data);
             if (result.data.length > 0) {
-              dispatch(setFoodItemsState(result.data));
+              dispatch(setCartFoodItemsState(result.data));
             }
           });
       }
@@ -72,7 +72,7 @@ const CartPage = () => {
       })
       .then((result: any) => {
         console.log(result.data);
-        dispatch(setFoodItemsState(result.data));
+        dispatch(setCartFoodItemsState(result.data));
       });
   };
 
@@ -84,12 +84,12 @@ const CartPage = () => {
       })
       .then((result: any) => {
         console.log(result.data);
-        dispatch(setFoodItemsState(result.data));
+        dispatch(setCartFoodItemsState(result.data));
       });
   };
 
   return (
-    <Box display='flex' flexDirection='column'>
+    <Box display="flex" flexDirection="column">
       {foodItems.map((item: any) => (
         <ShoppingCartItem
           cartItem={item.foodItem}
@@ -100,15 +100,15 @@ const CartPage = () => {
         />
       ))}
       <Box
-        display='flex'
-        flexDirection='row'
+        display="flex"
+        flexDirection="row"
         sx={{ marginY: "1rem" }}
-        justifyContent='center'
+        justifyContent="center"
       >
         <Typography
-          display='flex'
+          display="flex"
           alignItems={"center"}
-          variant='h5'
+          variant="h5"
           sx={{
             bgcolor: "background.paper",
             boxShadow: 1,
@@ -121,7 +121,7 @@ const CartPage = () => {
         </Typography>
 
         <Button
-          size='large'
+          size="large"
           sx={{
             backgroundColor: mainColors.darkGray,
             color: mainColors.lightOrange,
