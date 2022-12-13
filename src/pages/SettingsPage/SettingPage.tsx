@@ -10,7 +10,6 @@ import { updateEmail } from "firebase/auth";
 import { auth } from "../../lib/firebase"
 import {
   setUserInfoState,
-  setRestaurantsState,
 } from "../../redux/features/appStateSlice";
 import Tb from "./TabPanel";
 
@@ -47,6 +46,10 @@ const SettingPage = () => {
   const handleResChange = (e: any) => {
     const { name, value } = e.target;
     setupdateStateRes({ ...updateStateRes, [name]: value });
+  };
+  const [storeImage, setStoreImage]: any = useState();
+  const handleFileChange = (e: any) => {
+    setStoreImage(e.target.files[0]);
   };
 
   useEffect(() => {
@@ -107,10 +110,15 @@ const SettingPage = () => {
           bankAccountNum: updateStateRes.bankAccountNum,
           description: updateStateRes.description,
           pickupLocation: updateStateRes.pickupLocation,
+          image: storeImage,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }).then((servResult: any) => {
         console.log(servResult);
         setError("");
-        dispatch(setRestaurantsState(servResult.data));
       })
       .catch((e: any) => {
         setError(e.message);
@@ -312,7 +320,7 @@ const SettingPage = () => {
           <TextField
             required
             id='setting-description'
-            label='description'
+            label='Description'
             name='description'
             fullWidth
             value={updateStateRes.description}
@@ -321,7 +329,7 @@ const SettingPage = () => {
           <TextField
             required
             id='setting-bankAccountNum'
-            label='Bankaccountnum'
+            label='Bank Account Number'
             name='bankAccountNum'
             fullWidth
             value={updateStateRes.bankAccountNum}
@@ -336,6 +344,15 @@ const SettingPage = () => {
             value={updateStateRes.pickupLocation}
             onChange={handleResChange}
           />
+          <TextField
+            type="file"
+            id='setting-avatar'
+            name="image"
+            label='Restaurant Avatar'
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            onChange={handleFileChange}
+          ></TextField>
         {error && <Typography color='red'>{error}</Typography>}
         <Button
           size='large'
