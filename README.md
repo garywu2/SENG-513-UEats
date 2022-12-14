@@ -8,12 +8,14 @@ UEats is a React + Express application that helps coordinate students with food 
 
 ### Dependencies
 
-Depenndencies that are needed to run our project will first invovle the files themselves. \
-To get them you were need to clone our repoistory through running the following command:
+Dependencies that are needed to run our project will first involve the files themselves. \
+To get them you were need to clone our repository through running the following command:
 ```
 git clone https://github.com/garywu2/SENG-513-UEats.git
 ```
-Once this is done, you will also need to install MongoDB on your computer to use our database https://www.mongodb.com/docs/manual/installation/. There are many great tutorials online to help you with this depending on your OS. Also we recommmend installing MongoDB Compass as well however not stricly necessary.
+Once this is done, you will also need to install MongoDB on your computer to use our database https://www.mongodb.com/docs/manual/installation/. There are many great tutorials online to help you with this depending on your OS. We also recommend installing MongoDB Compass as well, however not strictly necessary.
+
+You will also need to install a version <= 16.10 on your computer https://nodejs.org/en/download/ Again there are many great tutorials online that can help you with installing this depending on your OS.
 
 Lastly, you will also need to create an add a .env file to the root of the directory in order to have access to our firebase authentication portion of our application. We have included these ENV values in the final report of our presentation as it is unsafe to include them in a public Github repo.
 
@@ -37,6 +39,27 @@ npm start
 ```
 
 This will run the the client on localhost:3000 and run the server on localhost:5000
+
+### Logging into the application 
+
+Once on localhost:3000
+
+You can sign up and create an account or use the following accounts that were creating during the populatioin of the database 
+``` 
+Customer
+email: ueats@testmail.com
+password: password
+
+Vendor
+email: steve@gmail.com
+password: password
+
+Admin
+email: smith@gmail.com
+password: password
+```
+
+### Alternative methods to run the application
 
 Optionally you can also run the server and client in two seperate terminals through running the following command in the root directory
 ```
