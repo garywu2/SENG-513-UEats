@@ -2,6 +2,8 @@
 
 SENG 513 Final Projects UEats 2022-2023
 
+By Gurmukh, Ryan, Gary, Niyousha and Ayman
+
 UEats is a React + Express application that helps coordinate students with food purchases from the University of Calgary. It helps bring convience to students as they can skip lines and pickup their meals at their convience.
 
 ## Development
@@ -15,7 +17,7 @@ git clone https://github.com/garywu2/SENG-513-UEats.git
 ```
 Once this is done, you will also need to install MongoDB on your computer to use our database https://www.mongodb.com/docs/manual/installation/. There are many great tutorials online to help you with this depending on your OS. We also recommend installing MongoDB Compass as well, however not strictly necessary.
 
-You will also need to install a version <= 16.10 on your computer https://nodejs.org/en/download/ Again there are many great tutorials online that can help you with installing this depending on your OS.
+You will also need to install a Node JS version <= 16.10 on your computer https://nodejs.org/en/download/ Again there are many great tutorials online that can help you with installing this depending on your OS.
 
 Lastly, you will also need to create an add a .env file to the root of the directory in order to have access to our firebase authentication portion of our application. We have included these ENV values in the final report of our presentation as it is unsafe to include them in a public Github repo.
 
