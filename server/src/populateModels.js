@@ -73,6 +73,8 @@ const saveStore = async (
     rating: 5,
     image: image,
   });
+  store.availabilityTime = { startTime: "08", endTime: "17" };
+
   try {
     await store.save();
   } catch (e) {
