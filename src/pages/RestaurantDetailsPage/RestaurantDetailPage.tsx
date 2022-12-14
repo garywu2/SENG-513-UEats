@@ -6,6 +6,8 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Chip,
+  Divider,
   Grid,
   Rating,
   TextField,
@@ -62,7 +64,6 @@ const RestaurantDetailPage = (props: any) => {
         }
       }
     }
-    console.log(sortedData);
     setReviews(sortedData);
   };
 
@@ -84,64 +85,70 @@ const RestaurantDetailPage = (props: any) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
+      <Grid container justifyContent={"center"} spacing={2}>
         {foodItems.length > 0 ? (
-          foodItems.map((item: any) => {
+          foodItems.map((item: any, index: number) => {
             return (
-              <Grid sx={{ margin: "1rem" }} key={item._id}>
-                <Card sx={{ minWidth: "250px", color: mainColors.darkGray }}>
-                  <CardHeader title={item.name}></CardHeader>
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={`data:image/png;base64, ${item.image.data}`}
-                    alt="Paella dish"
-                  />
-                  <CardContent>
-                    <Typography
-                      color={"black"}
-                      sx={{ fontSize: "1.5rem", textAlign: "center" }}
+              <Card
+                sx={{
+                  width: "100%",
+                  maxWidth: "345px",
+                  color: mainColors.darkGray,
+                  margin: "1rem",
+                }}
+                key={index}
+              >
+                <CardHeader title={item.name}></CardHeader>
+                <CardMedia
+                  component="img"
+                  height="194"
+                  image={`data:image/png;base64, ${item.image.data}`}
+                  alt="Paella dish"
+                />
+                <CardContent>
+                  <Typography
+                    color={"black"}
+                    sx={{ fontSize: "1.5rem", textAlign: "center" }}
+                  >
+                    Price: ${item.price}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  {!props.approvalStatus && (
+                    <Button
+                      size="small"
+                      sx={{
+                        backgroundColor: mainColors.darkGray,
+                        color: mainColors.lightOrange,
+                        margin: "auto",
+                        paddingX: "1rem",
+                      }}
+                      onClick={() => {
+                        axios
+                          .put(
+                            "http://localhost:5000/shopping-carts/add/food-item",
+                            {
+                              _id: userInfo.shoppingCart,
+                              foodItem: item._id,
+                              quantity: 1,
+                            }
+                          )
+                          .then((result: any) => {
+                            console.log(result);
+                            if (result.data) {
+                              dispatch(setCartFoodItemsState(result.data));
+                            }
+                          })
+                          .catch((e: any) => {
+                            console.log(e);
+                          });
+                      }}
                     >
-                      Price: ${item.price}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    {!props.approvalStatus && (
-                      <Button
-                        size="small"
-                        sx={{
-                          backgroundColor: mainColors.darkGray,
-                          color: mainColors.lightOrange,
-                          margin: "auto",
-                          paddingX: "1rem",
-                        }}
-                        onClick={() => {
-                          axios
-                            .put(
-                              "http://localhost:5000/shopping-carts/add/food-item",
-                              {
-                                _id: userInfo.shoppingCart,
-                                foodItem: item._id,
-                                quantity: 1,
-                              }
-                            )
-                            .then((result: any) => {
-                              console.log(result);
-                              if (result.data) {
-                                dispatch(setCartFoodItemsState(result.data));
-                              }
-                            })
-                            .catch((e: any) => {
-                              console.log(e);
-                            });
-                        }}
-                      >
-                        Add To Cart
-                      </Button>
-                    )}
-                  </CardActions>
-                </Card>
-              </Grid>
+                      Add To Cart
+                    </Button>
+                  )}
+                </CardActions>
+              </Card>
             );
           })
         ) : (
@@ -151,12 +158,19 @@ const RestaurantDetailPage = (props: any) => {
       {reviews.length > 0 &&
         reviews[0].comment.store &&
         reviews[0].comment.store.rating && (
-          <h3>
-            Store Rating:{" "}
-            {parseFloat(reviews[0].comment.store.rating).toFixed(1)}
-          </h3>
+          <Divider sx={{ margin: "2em" }}>
+            <Chip
+              sx={{ fontSize: 20 }}
+              label={`Store Rating:${" "}
+            ${(
+              reviews.reduce(function (sum: any, data: any) {
+                return sum + data.comment.rating;
+              }, 0) / reviews.length
+            ).toFixed(1)}`}
+            />
+          </Divider>
         )}
-      <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
+      <Grid container alignItems={"center"} flexDirection={"column"}>
         {reviews.map((review: any) => {
           return (
             <ClientReview
@@ -168,60 +182,67 @@ const RestaurantDetailPage = (props: any) => {
             />
           );
         })}
-        <Grid
-          sx={{
-            justifyItems: "center",
-            alignItems: "center",
-            marginTop: "1rem",
-          }}
-          container
-        >
-          <Rating
-            sx={{ marginX: "1rem" }}
-            value={userRating}
-            onChange={(e: any) => {
-              setUserRating(e.target.value);
-            }}
-          ></Rating>
-          <TextField
-            label="Review"
-            value={userReview}
-            onChange={(e: any) => {
-              setUserReview(e.target.value);
-            }}
-          ></TextField>
-          <Button
+        {userInfo.type === "client" && (
+          <Box
             sx={{
-              backgroundColor: mainColors.darkGray,
-              color: mainColors.lightOrange,
-              margin: "auto",
-              paddingX: "1rem",
-            }}
-            onClick={() => {
-              if (userReview) {
-                axios
-                  .post("http://localhost:5000/reviews", {
-                    client: userInfo._id,
-                    store: restaurantID,
-                    reviewType: "comment",
-                    comment: userReview,
-                    rating: userRating,
-                  })
-                  .then((result: any) => {
-                    console.log(result);
-                    sortreviewsData(result.data);
-                    setUserReview("");
-                    setUserRating(5);
-                  })
-                  .catch((e: any) => {
-                    console.log(e);
-                  });
-              }
+              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              width: "100%",
+              maxWidth: "800px",
+              p: 1,
             }}
           >
-            Add Review
-          </Button>
-        </Grid>
+            <TextField
+              label="Write Your Review Here!"
+              value={userReview}
+              onChange={(e: any) => {
+                setUserReview(e.target.value);
+              }}
+              multiline
+              sx={{ display: "flex", width: "100%" }}
+            ></TextField>
+            <Rating
+              sx={{
+                marginY: "1rem",
+                justifyContent: "center",
+              }}
+              value={userRating}
+              onChange={(e: any) => {
+                setUserRating(e.target.value);
+              }}
+            ></Rating>
+            <Button
+              sx={{
+                backgroundColor: mainColors.darkGray,
+                color: mainColors.lightOrange,
+              }}
+              onClick={() => {
+                if (userReview) {
+                  axios
+                    .post("http://localhost:5000/reviews", {
+                      client: userInfo._id,
+                      store: restaurantID,
+                      reviewType: "comment",
+                      comment: userReview,
+                      rating: userRating,
+                    })
+                    .then((result: any) => {
+                      sortreviewsData(result.data);
+                      setUserReview("");
+                      setUserRating(5);
+                    })
+                    .catch((e: any) => {
+                      console.log(e);
+                    });
+                }
+              }}
+            >
+              Submit Review
+            </Button>
+          </Box>
+        )}
       </Grid>
     </Box>
   );
