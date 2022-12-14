@@ -183,7 +183,10 @@ router.delete("/", async (req, res) => {
       await store.save();
     }
 
-    res.json({ msg: "Review deleted successfully" });
+    const reviews = await Review.find({ store: review.store })
+      .populate("client")
+      .populate("store");
+    res.json(reviews);
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }

@@ -171,6 +171,8 @@ router.delete("/", async (req, res) => {
       await Review.deleteMany({ store: storeID });
     } else {
       await ShoppingCart.deleteOne({ _id: user.shoppingCart });
+      await Order.deleteMany({ client: id });
+      await Review.deleteMany({ client: id });
     }
     await User.deleteOne({ _id: id });
     const users = await User.find();

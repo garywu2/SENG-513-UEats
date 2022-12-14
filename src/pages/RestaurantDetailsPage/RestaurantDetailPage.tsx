@@ -31,6 +31,17 @@ const RestaurantDetailPage = (props: any) => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state: any) => state.appState.userInfo);
 
+  const handleReviewDelete = (id: any) => {
+    axios
+      .delete(`http://localhost:5000/reviews`, { data: { _id: id } })
+      .then((result: any) => {
+        sortreviewsData(result.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+      });
+  };
+
   const sortreviewsData = (reviewData: any) => {
     const sortedData = [];
     for (let i = 0; i < reviewData.length; i++) {
@@ -152,6 +163,8 @@ const RestaurantDetailPage = (props: any) => {
               comment={review.comment}
               reply={review.reply}
               key={review.comment._id}
+              signedUser={userInfo}
+              handleDelete={handleReviewDelete}
             />
           );
         })}
