@@ -14,13 +14,21 @@ mongoose.connect("mongodb://localhost/ueatsdb", () => {
   console.log("connected");
 });
 
-const saveUser = async (name, email, phoneNum, username, type) => {
+const saveUser = async (
+  name,
+  email,
+  phoneNum,
+  username,
+  type,
+  approvalStatus = false
+) => {
   const user = new User({
     name: name,
     email: email,
     phoneNum: phoneNum,
     username: username,
     type: type,
+    approvalStatus: approvalStatus,
   });
 
   await user.save();
@@ -206,10 +214,16 @@ const saveReview = async (
   console.log(`Review "${comment}" saved`);
 };
 
-const addReviewParent = async () => {
-  const review = await Review.findOne({ reviewType: REVIEW_TYPE.reply });
-  const parent = await Review.findOne({ reviewType: REVIEW_TYPE.comment });
-  review.parent = parent;
+const addReviewParent = async (clientID) => {
+  const review = await Review.findOne({
+    client: clientID,
+    reviewType: "reply",
+  });
+  const parent = await Review.findOne({
+    client: clientID,
+    reviewType: "comment",
+  });
+  review.parent = parent._id;
   await review.save();
 };
 
@@ -218,7 +232,7 @@ const addReviewParent = async () => {
 const insertData = async () => {
   await saveUser(
     "Smith",
-    "smith@gmail.com",
+    "smith@testmail.com",
     "1234567895",
     "smith",
     USER_TYPE.admin
@@ -226,7 +240,7 @@ const insertData = async () => {
 
   await saveUser(
     "John",
-    "JOHN@gmail.com",
+    "john@testmail.com",
     "1234567895",
     "JOHN",
     USER_TYPE.client
@@ -242,15 +256,16 @@ const insertData = async () => {
 
   await saveUser(
     "Steve",
-    "steve@gmail.com",
+    "steve@testmail.com",
     "1234567895",
     "steve1",
-    USER_TYPE.vendor
+    USER_TYPE.vendor,
+    true
   );
 
   await saveUser(
     "Steve2",
-    "steve2@gmail.com",
+    "steve2@testmail.com",
     "1234567896",
     "steve2",
     USER_TYPE.vendor
@@ -258,14 +273,14 @@ const insertData = async () => {
 
   await saveUser(
     "Steve3",
-    "steve3@gmail.com",
+    "steve3@testmail.com",
     "1234567897",
     "steve3",
     USER_TYPE.vendor
   );
   await saveUser(
     "NoStoreSteve",
-    "NoStoreSteve@gmail.com",
+    "NoStoreSteve@testmail.com",
     "1234567897",
     "NoStoreSteve",
     USER_TYPE.vendor
@@ -276,7 +291,6 @@ const insertData = async () => {
   const vendorID2 = await getUserID("Steve3");
   const clientID = await getUserID("John");
   const clientIDuEats = await getUserID("Ueats");
-  const clientID2 = await getUserID("Smith");
 
   await saveStore(
     "Carl's Jr",
@@ -361,38 +375,6 @@ const insertData = async () => {
     10,
     ORDER_STATUS.processed
   );
-  await saveOrder(
-    clientIDuEats,
-    storeID,
-    foodItems,
-    new Date(),
-    10,
-    ORDER_STATUS.processed
-  );
-  await saveOrder(
-    clientID,
-    storeID1,
-    foodItems,
-    new Date(),
-    10,
-    ORDER_STATUS.processed
-  );
-  await saveOrder(
-    clientID,
-    storeID2,
-    foodItems,
-    new Date(),
-    10,
-    ORDER_STATUS.processed
-  );
-  await saveOrder(
-    clientID2,
-    storeID,
-    foodItems,
-    new Date(),
-    10,
-    ORDER_STATUS.processed
-  );
 
   await saveShoppingCart(clientIDuEats, foodItems);
   await saveShoppingCart(clientID, foodItems);
@@ -404,8 +386,6 @@ const insertData = async () => {
   addStoreToUser(vendorID2, storeID2);
 
   await addOrdersToStore(storeID);
-  await addOrdersToStore(storeID1);
-  await addOrdersToStore(storeID2);
   await addFoodItemsToStore(storeID, foodItems);
 
   await saveReview(
@@ -416,6 +396,7 @@ const insertData = async () => {
     REVIEW_TYPE.comment,
     5
   );
+
   await saveReview(
     clientID,
     storeID,
@@ -423,7 +404,7 @@ const insertData = async () => {
     new Date(),
     REVIEW_TYPE.reply
   );
-  addReviewParent();
+
   await saveReview(
     clientIDuEats,
     storeID,
@@ -439,7 +420,8 @@ const insertData = async () => {
     new Date(),
     REVIEW_TYPE.reply
   );
-  addReviewParent();
+  addReviewParent(clientID);
+  addReviewParent(clientIDuEats);
 };
 
 insertData();

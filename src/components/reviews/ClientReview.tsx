@@ -1,6 +1,8 @@
-import { Box, Container, Grid, Rating, Typography } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import { Box, Container, Fab, Grid, Rating, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useState } from "react";
+import { mainColors } from "../../configs/colorConfigs";
 
 const ClientReview = (props: any) => {
   const [rating, setRating] = useState(props.comment.rating);
@@ -64,6 +66,23 @@ const ClientReview = (props: any) => {
             >
               {getDateFormat(props.comment.date)}
             </Typography>
+            {(props.signedUser._id === props.comment.client._id ||
+              props.signedUser.type === "admin") && (
+              <Fab
+                aria-label="delete"
+                size="small"
+                sx={{
+                  color: mainColors.lightOrange,
+                  backgroundColor: mainColors.darkGray,
+                  marginLeft: "2rem",
+                }}
+                onClick={() => {
+                  props.handleDelete(props.comment._id);
+                }}
+              >
+                <Delete />
+              </Fab>
+            )}
           </Box>
           <Typography sx={{ display: "inline-block" }}>
             {props.comment.comment}
