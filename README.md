@@ -75,7 +75,7 @@ npm run dev-server
 This will start up the server aspect of the application
 
 Lastly, if you would like to reset the data in the DB, you can simply drop the entire database and run the following command to repopulate it
-### populating the database
+### Populating the database
 
 ```
 npm run populate
