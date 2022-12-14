@@ -51,11 +51,11 @@ email: ueats@testmail.com
 password: password
 
 Vendor
-email: steve@gmail.com
+email: steve@testmail.com
 password: password
 
 Admin
-email: smith@gmail.com
+email: smith@testmail.com
 password: password
 ```
 
