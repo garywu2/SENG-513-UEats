@@ -130,8 +130,8 @@ router.post("/", async (req, res) => {
   review.date = new Date();
 
   try {
-    const dbOrder = new Review(review);
-    await dbOrder.save();
+    const dbReview = new Review(review);
+    dbReview.save();
 
     if (review.reviewType === REVIEW_TYPE.comment) {
       const store = await Store.findOne({ _id: review.store });
@@ -144,8 +144,13 @@ router.post("/", async (req, res) => {
           (parseFloat(review.rating) - store.rating) / numReviews;
       }
       await store.save();
+      const reviews = await Review.find({ store: review.store })
+        .populate("client")
+        .populate("store");
+      res.json(reviews);
+      return;
     }
-    const reviews = await Review.find({ store: review.store })
+    const reviews = await Review.find({ _id: dbReview._id })
       .populate("client")
       .populate("store");
     res.json(reviews);
