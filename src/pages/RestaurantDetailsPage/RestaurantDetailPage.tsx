@@ -114,7 +114,7 @@ const RestaurantDetailPage = (props: any) => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  {!props.approvalStatus && (
+                  {userInfo.type === "client" && (
                     <Button
                       size="small"
                       sx={{

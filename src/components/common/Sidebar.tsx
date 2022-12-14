@@ -42,11 +42,7 @@ const Sidebar = () => {
         return false;
       }
     } else if (userInfo.type && userInfo.type === "vendor") {
-      if (
-        lcText === "restaurants" ||
-        lcText === "shopping cart" ||
-        lcText === "manage users"
-      ) {
+      if (lcText === "shopping cart" || lcText === "manage users") {
         return false;
       }
     } else if (userInfo.type && userInfo.type === "admin") {
@@ -90,11 +86,11 @@ const Sidebar = () => {
       >
         <Toolbar sx={{ marginBottom: "20px" }}>
           <Stack sx={{ width: "100%" }} direction="row" justifyContent="center">
-          <Link to = '/dashboard'> 
-            <Avatar
-              src={assets.images.logo}
-              sx={{ width: isMobile ? 70 : 100, height: isMobile ? 70 : 100 }}
-            />
+            <Link to="/dashboard">
+              <Avatar
+                src={assets.images.logo}
+                sx={{ width: isMobile ? 70 : 100, height: isMobile ? 70 : 100 }}
+              />
             </Link>
           </Stack>
         </Toolbar>
