@@ -220,7 +220,7 @@ const CreateStoreForm = (props: any) => {
           }}
           onClick={handleSumbit}
         >
-          Create User
+          Create Store
         </Button>
       </Box>
     </div>
